@@ -2,9 +2,10 @@ import { describe, expect, it } from "vitest";
 import { config } from "@/game/config";
 import { screenTilt, tiltVector } from "@/game/input";
 
-// Device tilted so its top goes away from the user (beta +10) and its right side down (gamma +10).
-const beta = 10;
-const gamma = 10;
+// Device tilted top away from the user (beta) and right side down (gamma), by different angles
+// so a swapped axis fails.
+const beta = 12;
+const gamma = 5;
 
 describe("screenTilt", () => {
   it.each([

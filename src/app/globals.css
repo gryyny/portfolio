@@ -650,6 +650,24 @@ p {
     bottom: calc(20px + env(safe-area-inset-bottom));
     transform: translateX(-50%);
   }
+  /* Full width: the question on its own line, then two equal buttons. */
+  .consent {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: none;
+    transform: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 12px;
+  }
+  .consent span {
+    grid-column: 1 / -1;
+  }
+  .consent button {
+    justify-content: center;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

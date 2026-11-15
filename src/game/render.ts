@@ -72,7 +72,7 @@ export function createRenderer(canvas: HTMLCanvasElement, reducedMotion: boolean
     }
     gc.fillStyle = palette.muted;
     gc.font = `10px ${mono}`;
-    gc.fillText("main", 8, height - 10);
+    gc.fillText(`main · ${process.env.NEXT_PUBLIC_BUILD_COMMIT ?? "dev"}`, 8, height - 10);
     return g;
   }
 

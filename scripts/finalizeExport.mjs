@@ -6,7 +6,7 @@ import { readdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { parse } from "parse5";
 
-const OUT = "out";
+const OUT = process.env.EXPORT_DIR ?? "out";
 
 // Google Analytics for Firebase, used only after consent.
 const analytics = {

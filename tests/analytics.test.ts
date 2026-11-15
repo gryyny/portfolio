@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Firebase is replaced with spies: the test asserts what the consent gate imports and calls,
 // with a fully configured project, without any network.
+const imported = vi.hoisted(() => ({ app: 0, analytics: 0 }));
 const firebase = vi.hoisted(() => ({
   initializeApp: vi.fn(() => ({})),
   getAnalytics: vi.fn(() => ({ analytics: true })),
@@ -9,13 +10,20 @@ const firebase = vi.hoisted(() => ({
   logEvent: vi.fn(),
   setAnalyticsCollectionEnabled: vi.fn(),
 }));
-vi.mock("firebase/app", () => ({ initializeApp: firebase.initializeApp }));
-vi.mock("firebase/analytics", () => ({
-  getAnalytics: firebase.getAnalytics,
-  isSupported: firebase.isSupported,
-  logEvent: firebase.logEvent,
-  setAnalyticsCollectionEnabled: firebase.setAnalyticsCollectionEnabled,
-}));
+// The factories count module evaluations, so an eager SDK import fails the "nothing" cases.
+vi.mock("firebase/app", () => {
+  imported.app++;
+  return { initializeApp: firebase.initializeApp };
+});
+vi.mock("firebase/analytics", () => {
+  imported.analytics++;
+  return {
+    getAnalytics: firebase.getAnalytics,
+    isSupported: firebase.isSupported,
+    logEvent: firebase.logEvent,
+    setAnalyticsCollectionEnabled: firebase.setAnalyticsCollectionEnabled,
+  };
+});
 
 const reload = vi.fn();
 let cookies: string[] = [];
@@ -49,6 +57,8 @@ beforeEach(() => {
     },
   });
   Object.values(firebase).forEach((spy) => spy.mockClear());
+  imported.app = 0;
+  imported.analytics = 0;
   reload.mockClear();
 });
 
@@ -64,7 +74,7 @@ describe("consent gate with a configured Firebase project", () => {
     analytics.initAnalytics();
     analytics.track("game_start");
     await settle();
-    expect(firebase.initializeApp).not.toHaveBeenCalled();
+    expect(imported).toEqual({ app: 0, analytics: 0 });
     expect(firebase.logEvent).not.toHaveBeenCalled();
   });
 
@@ -91,7 +101,7 @@ describe("consent gate with a configured Firebase project", () => {
     nextPage.track("game_start");
     await settle();
     expect(nextPage.readConsent()).toBe("denied");
-    expect(firebase.initializeApp).not.toHaveBeenCalled();
+    expect(imported).toEqual({ app: 0, analytics: 0 });
   });
 
   it("initializes once after Allow and then logs events", async () => {

@@ -17,6 +17,7 @@
     "knip": "knip",
     "test": "vitest run",
     "smoke": "playwright test",
+    "verify:consent": "EXPORT_DIR=out-consent NEXT_PUBLIC_FIREBASE_API_KEY=fixture-api-key NEXT_PUBLIC_FIREBASE_APP_ID=1:000000000000:web:0000000000000000 NEXT_PUBLIC_FIREBASE_PROJECT_ID=fixture-project NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-FIXTURE000 pnpm build && playwright test -c playwright.consent.config.ts",
     "lighthouse": "lhci autorun"
   },
   "dependencies": {

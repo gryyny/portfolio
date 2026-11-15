@@ -2,6 +2,7 @@
 pnpm-lock.yaml
 .next/
 out/
+out-consent/
 spec/
 playwright-report/
 test-results/

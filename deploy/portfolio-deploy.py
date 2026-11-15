@@ -11,8 +11,10 @@ The key can do exactly three things under PORTFOLIO_ROOT (/srv/portfolio):
 There is no shell, no other path and no other command.
 
 Uploads run through rrsync (rsync >= 3.4.1) rooted at the one destination directory, so they
-cannot reach history, the lock, `current` or other releases. -no-overwrite keeps every upload
-append-only, -munge turns uploaded symlinks into dead links and -no-del forbids deletes.
+cannot reach history, the lock, `current` or other releases. Shared assets are append-only
+(-no-overwrite); an unpromoted release can be re-uploaded so a retry replaces a partial or stale
+attempt, and a promoted one is refused outright. -munge turns uploaded symlinks into dead links and
+-no-del forbids deletes.
 Options are allowlisted here as well: Ubuntu's rrsync 3.4.1 still accepts --log-file under
 -no-overwrite, which could append to an existing file inside the destination.
 """
@@ -108,7 +110,9 @@ def upload(args: list[str]) -> None:
     os.makedirs(destination, exist_ok=True)
     # rrsync sees only the destination directory, so the client's path becomes ".".
     env = {**os.environ, "SSH_ORIGINAL_COMMAND": shlex.join([*args[:-1], "."])}
-    flags = ["-wo", "-no-del", "-no-overwrite", "-munge"]
+    flags = ["-wo", "-no-del", "-munge"]
+    if target.startswith("shared/"):
+        flags.append("-no-overwrite")
     # A child process, not exec: the caller keeps holding the lock until the transfer ends.
     sys.exit(subprocess.run([RRSYNC, *flags, destination], env=env).returncode)
 

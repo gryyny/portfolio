@@ -105,12 +105,18 @@ describe("portfolio deploy command", () => {
     expect(run(command).ok).toBe(false);
   });
 
-  it("roots rrsync at the one destination, append-only, without deletes, with links munged", () => {
+  it("roots rrsync at the one destination, without deletes, with links munged", () => {
     const result = run(upload(`releases/${a}/`));
     expect(result.ok).toBe(true);
     expect(result.out.trim()).toBe(
-      `-wo -no-del -no-overwrite -munge ${join(root, "releases", a)}|rsync --server -logDtpre.iLsfxCIvu . .`,
+      `-wo -no-del -munge ${join(root, "releases", a)}|rsync --server -logDtpre.iLsfxCIvu . .`,
     );
+  });
+
+  it("keeps shared assets append-only but lets a retry replace an unpromoted release", () => {
+    expect(run(upload("shared/_next/static/")).out).toContain("-no-overwrite");
+    run(upload(`releases/${a}/`));
+    expect(run(upload(`releases/${a}/`)).out).not.toContain("-no-overwrite");
   });
 
   it("keeps the lock until the transfer process has exited", async () => {

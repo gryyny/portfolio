@@ -160,7 +160,9 @@ export function Portfolio({ hero, links }: { hero: ReactNode; links: ReactNode }
           <div className="qbar">
             <i ref={barRef} />
           </div>
-          <p className="eyebrow">Last rollback · answer in 3 s · {quiz.topic}</p>
+          <p className="eyebrow">
+            Last rollback · answer in {config.quiz.deadlineS} s · {quiz.topic}
+          </p>
           <p className="qq">
             {quiz.revealed && quiz.picked === null ? "Too slow. The fix was:" : quiz.question}
           </p>
@@ -190,7 +192,7 @@ export function Portfolio({ hero, links }: { hero: ReactNode; links: ReactNode }
         </div>
       )}
 
-      {phase === "over" && result && <GameOver result={result} links={links} controls={controls} />}
+      {phase === "over" && result && <GameOver result={result} controls={controls} />}
 
       {promo && phase === "playing" && (
         <div className="nudge" role="status">
@@ -269,11 +271,9 @@ export function Portfolio({ hero, links }: { hero: ReactNode; links: ReactNode }
 
 function GameOver({
   result,
-  links,
   controls,
 }: {
   result: Result;
-  links: ReactNode;
   controls: { current: Controls | null };
 }) {
   const releases = result.releases === 1 ? "1 release" : `${result.releases} releases`;
@@ -284,29 +284,6 @@ function GameOver({
       <p>
         {releases} shipped. {result.isBest ? "New personal best." : `Your best: ${result.best}.`}
       </p>
-      <p className="ask">Enjoyed it? Connect with me or star the repo. It helps a lot.</p>
-      <div className="row">
-        <a
-          className="play ghost"
-          href={profile.links.linkedin}
-          target="_blank"
-          rel="noopener"
-          data-link="linkedin"
-          data-ask="game_over"
-        >
-          Connect on LinkedIn ↗
-        </a>
-        <a
-          className="play ghost"
-          href={profile.links.repo}
-          target="_blank"
-          rel="noopener"
-          data-link="github"
-          data-ask="game_over"
-        >
-          Star on GitHub ↗
-        </a>
-      </div>
       <div className="row">
         <button type="button" className="play" onClick={() => controls.current?.play()}>
           Play again
@@ -315,9 +292,29 @@ function GameOver({
           Exit
         </button>
       </div>
-      <nav className="links" aria-label="Profiles">
-        {links}
-      </nav>
+      <p className="ask">
+        Enjoyed it?{" "}
+        <a
+          href={profile.links.linkedin}
+          target="_blank"
+          rel="noopener"
+          data-link="linkedin"
+          data-ask="game_over"
+        >
+          Connect
+        </a>{" "}
+        or{" "}
+        <a
+          href={profile.links.repo}
+          target="_blank"
+          rel="noopener"
+          data-link="github"
+          data-ask="game_over"
+        >
+          star the repo
+        </a>
+        .
+      </p>
     </div>
   );
 }

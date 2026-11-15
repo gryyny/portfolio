@@ -30,7 +30,7 @@ export const config = {
   hitSafetyS: 1.6,
 
   quiz: {
-    deadlineS: 3,
+    deadlineS: 7,
     guardS: 0.15,
     feedbackRightS: 0.45,
     feedbackMissS: 0.9,

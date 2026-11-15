@@ -7,9 +7,10 @@
 # `current`, so later symlink swaps are visible inside the container.
 #
 # Applying it recreates the Caddy container (a reload cannot add mounts), which can drop
-# proxied diary requests for a moment. The app and database are not restarted:
-#   docker compose run --rm --no-deps caddy caddy validate --config /etc/caddy/Caddyfile.all --adapter caddyfile
-#   docker compose up -d --no-deps caddy
+# proxied diary requests for a moment. The app and database are not restarted. The live stack
+# is the Compose project "food-diary", not the directory name, so always pass -p:
+#   docker compose -p food-diary run --rm --no-deps caddy caddy validate --config /etc/caddy/Caddyfile.all --adapter caddyfile
+#   docker compose -p food-diary up -d --no-deps caddy
 # Then check the diary page, its API health and its auth proxy. Later releases need no reload.
 
 gryyny.si {

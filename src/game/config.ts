@@ -4,8 +4,9 @@ export const config = {
   scaleReference: 520,
   scaleRange: [0.65, 1.25],
   margin: 40,
-  // The smallest clear area worth keeping; if overlays leave less, they are ignored instead.
-  arenaMin: 160,
+  // The smallest clear area, each way: room for the player and a pickup between the margins.
+  // If overlays leave less, the area grows around its centre to this size within the safe area.
+  arenaMin: 100,
 
   player: { radius: 11, speed: 270, response: 7, trailStep: 7, trailLength: 70 },
   // slack: extra reach for picking up a check, on top of both radii.

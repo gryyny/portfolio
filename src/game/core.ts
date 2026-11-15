@@ -366,11 +366,16 @@ function resolve(s: GameState, contact: Contact, rng: Rng): boolean {
       s.checks.splice(i, 1);
       s.collected++;
       s.events.push({ type: "check", at: contact.check });
-      if (s.collected >= s.required) {
-        s.gate.open = true;
-        s.events.push({ type: "gateOpen" });
-      } else fillChecks(s, rng);
-      return false;
+      if (s.collected < s.required) {
+        fillChecks(s, rng);
+        return false;
+      }
+      s.gate.open = true;
+      s.events.push({ type: "gateOpen" });
+      // Already standing in the gate: its contact was passed while it was closed, so ship now.
+      if (distance(s.gate, s.player) >= config.player.radius + config.gate.radius) return false;
+      ship(s, rng);
+      return true;
     }
     case "chip":
       pickChip(s, rng);

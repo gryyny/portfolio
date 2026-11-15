@@ -220,7 +220,7 @@ export function startGameSession(
    * The canvas area clear of the device safe areas (the stage's own padding) and of overlays.
    * Each overlay cuts off whichever side of the area loses the least, so a bar at the top trims
    * the top and a stick in a landscape corner trims the side. If too little is left to play in,
-   * the overlays are ignored rather than squeezing the game into a sliver.
+   * the area grows around its centre to the minimum, overlapping overlays as little as possible.
    */
   function arena(w: number, h: number): Bounds {
     const css = getComputedStyle(stage);
@@ -254,8 +254,9 @@ export function startGameSession(
       ];
       b = cuts.reduce((best, cut) => (area(cut) > area(best) ? cut : best));
     }
-    const { arenaMin } = config;
-    return b.right - b.left < arenaMin || b.bottom - b.top < arenaMin ? safe : b;
+    const [left, right] = atLeast(b.left, b.right, safe.left, safe.right);
+    const [top, bottom] = atLeast(b.top, b.bottom, safe.top, safe.bottom);
+    return { left, top, right, bottom };
   }
 
   function measure() {
@@ -398,6 +399,14 @@ export function startGameSession(
     measure();
   });
   return session;
+}
+
+/** Widens [lo, hi] around its centre to `config.arenaMin`, kept inside [min, max] when it fits. */
+function atLeast(lo: number, hi: number, min: number, max: number): [number, number] {
+  const size = Math.min(config.arenaMin, max - min);
+  if (hi - lo >= size) return [lo, hi];
+  const start = Math.min(Math.max((lo + hi) / 2 - size / 2, min), max - size);
+  return [start, start + size];
 }
 
 function saveBest(releases: number, version: string): Result {

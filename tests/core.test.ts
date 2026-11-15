@@ -383,4 +383,18 @@ describe("touch stick", () => {
     expect(s.quiz?.bugId).toBe(bug.id);
     expect(s.player.x).toBeLessThan(100 + span);
   });
+
+  it("ships at once when the last check opens the gate the player is standing in", () => {
+    const { s, rng, dt, at } = oneFrame();
+    s.rollbacks = 1;
+    s.gate.x = 100;
+    s.gate.y = 400;
+    s.collected = s.required - 1;
+    s.checks = [{ x: at(0.5, r + config.checks.radius + config.checks.slack), y: 400 }];
+    bugAt(s, at(0.85, r + config.bugs.radius), 400);
+    step(s, right, dt, rng, true);
+    expect(s.releases).toBe(1);
+    expect(s.phase).toBe("playing");
+    expect(s.quiz).toBeNull();
+  });
 });

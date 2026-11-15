@@ -30,7 +30,7 @@ jobs:
       - run: pnpm check
       # Separate from the check because scores vary with machine load; still required to deploy.
       - run: pnpm lighthouse
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: site
           path: out/
@@ -52,7 +52,7 @@ jobs:
         run: |
           head=$(git ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" refs/heads/main | cut -f1)
           echo "current=$([ "$head" = "$GITHUB_SHA" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         if: steps.fresh.outputs.current == 'true'
         with:
           name: site

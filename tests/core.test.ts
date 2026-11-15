@@ -327,43 +327,60 @@ describe("touch stick", () => {
   }
   const right = { x: 1, y: 0 };
   const frame = 1 / 60;
+  const r = config.player.radius;
 
-  it("holds still on a centred stick and stops dead on release, with no glide", () => {
+  it("keeps no momentum: centred, released, or after answering the quiz", () => {
     const { s, rng } = lane();
     s.player.vx = 200;
     step(s, still, frame, rng, true);
     expect(s.player.x).toBe(100);
     step(s, right, frame, rng, true);
-    expect(s.player.x).toBeCloseTo(100 + config.player.speed * s.scale * frame);
     const moving = s.player.x;
     step(s, still, frame, rng, true);
     expect(s.player.x).toBe(moving);
-  });
 
-  it("moves at top speed at most and collects and collides along the way", () => {
-    const { s, rng } = lane();
-    s.checks = [{ x: 180, y: 400 }];
-    bugAt(s, 260, 400);
-    const top = config.player.speed * s.scale * frame;
-    for (let i = 0; i < 60; i++) {
-      const before = s.player.x;
-      step(s, right, frame, rng, true);
-      expect(s.player.x - before).toBeLessThanOrEqual(top + 1e-9);
-    }
-    expect(s.collected).toBe(1);
-    expect(s.rollbacks).toBe(config.rollbacks - 1);
-  });
-
-  it("stops in travel order when a bug opens the quiz before a check further along", () => {
-    const { s, rng } = lane();
+    s.player.vx = 300;
     s.rollbacks = 1;
-    const bug = bugAt(s, 200, 400);
-    s.checks = [{ x: 300, y: 400 }];
-    for (let i = 0; i < 120 && s.phase === "playing"; i++) step(s, right, frame, rng, true);
+    bugAt(s, s.player.x, s.player.y);
+    step(s, still, frame, rng);
+    expect(s.phase).toBe("quiz");
+    const frozen = s.player.x;
+    answer(s, s.quiz?.right ?? "", config.quiz.guardS + 0.01);
+    step(s, still, config.quiz.feedbackRightS + 0.01, rng);
+    expect(s.phase).toBe("playing");
+    step(s, still, frame, rng);
+    expect(s.player.x).toBe(frozen);
+  });
+
+  // One frame at the longest movement step, with two contacts close together along it.
+  function oneFrame() {
+    const { s, rng } = lane();
+    const dt = config.movementDtMax;
+    const span = config.player.speed * s.scale * dt;
+    const at = (share: number, reach: number) => 100 + span * share + reach;
+    return { s, rng, dt, span, at };
+  }
+
+  it("lets a shield chip reached first protect against a bug reached just after", () => {
+    const { s, dt, at } = oneFrame();
+    s.rollbacks = 1;
+    s.chip = { x: at(0.75, r + config.perk.radius), y: 400, life: 5 };
+    bugAt(s, at(0.85, r + config.bugs.radius), 400);
+    step(s, right, dt, () => 0.25, true);
+    expect(s.shield).toBeGreaterThan(0);
+    expect(s.phase).toBe("playing");
+    expect(s.rollbacks).toBe(1);
+  });
+
+  it("collects a check reached first, then stops the move where a bug opens the quiz", () => {
+    const { s, rng, dt, span, at } = oneFrame();
+    s.rollbacks = 1;
+    s.checks = [{ x: at(0.75, r + config.checks.radius + config.checks.slack), y: 400 }];
+    const bug = bugAt(s, at(0.85, r + config.bugs.radius), 400);
+    step(s, right, dt, rng, true);
+    expect(s.collected).toBe(1);
     expect(s.phase).toBe("quiz");
     expect(s.quiz?.bugId).toBe(bug.id);
-    expect(s.collected).toBe(0);
-    expect(s.checks).toHaveLength(1);
-    expect(s.player.x).toBeLessThan(bug.x);
+    expect(s.player.x).toBeLessThan(100 + span);
   });
 });

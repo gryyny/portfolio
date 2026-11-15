@@ -22,8 +22,8 @@ function keyboardVector(keys: ReadonlySet<string>): Vec {
 }
 
 /**
- * Turns a thumb's offset from the stick's centre (px) into movement in [-1, 1]. Inside the dead
- * zone it is zero, so touching the stick never moves the player by itself.
+ * Turns a thumb's offset from where it landed (px) into movement in [-1, 1]. Inside the dead
+ * zone it is zero, so a resting or slightly wobbling thumb moves nothing.
  */
 export function stickVector(offset: Vec): Vec {
   const { radius, deadZone } = config.joystick;
@@ -32,6 +32,39 @@ export function stickVector(offset: Vec): Vec {
   if (d <= dead) return { x: 0, y: 0 };
   const m = Math.min(1, (d - dead) / (radius - dead));
   return { x: (offset.x / d) * m, y: (offset.y / d) * m };
+}
+
+/**
+ * One thumb on the stick. Steering is measured from where the thumb landed, so a press is
+ * neutral until the thumb moves; other fingers are ignored, and a release (lifted, cancelled or
+ * capture lost) ends steering at once.
+ */
+export interface StickTracker {
+  press(id: number, x: number, y: number): void;
+  move(id: number, x: number, y: number): void;
+  /** True when `id` was the steering thumb. */
+  release(id: number): boolean;
+  /** The thumb's offset from where it landed, or null when the stick is not held. */
+  offset(): Vec | null;
+}
+
+export function createStickTracker(): StickTracker {
+  let thumb: { id: number; origin: Vec; offset: Vec } | null = null;
+  return {
+    press(id, x, y) {
+      thumb ??= { id, origin: { x, y }, offset: { x: 0, y: 0 } };
+    },
+    move(id, x, y) {
+      if (thumb?.id !== id) return;
+      thumb.offset = { x: x - thumb.origin.x, y: y - thumb.origin.y };
+    },
+    release(id) {
+      if (thumb?.id !== id) return false;
+      thumb = null;
+      return true;
+    },
+    offset: () => thumb?.offset ?? null,
+  };
 }
 
 /** Maps device beta/gamma (degrees) into screen axes for the current screen rotation. */
@@ -96,7 +129,8 @@ export function createInput(
   options: { mode: () => InputMode; onCommand: (command: Command) => void },
 ): Input {
   const keys = new Set<string>();
-  let stick: { id: number; el: HTMLElement; offset: Vec } | null = null;
+  const thumb = createStickTracker();
+  let stick: { id: number; el: HTMLElement } | null = null;
   let released = false;
   let tilt: Tilt | null = null;
 
@@ -124,8 +158,8 @@ export function createInput(
     keys.clear();
   };
 
-  const releaseStick = () => {
-    if (!stick) return;
+  const releaseStick = (id: number) => {
+    if (!stick || !thumb.release(id)) return;
     stick.el.querySelector("i")?.style.removeProperty("transform");
     stick = null;
     released = true;
@@ -133,16 +167,15 @@ export function createInput(
   const onPointerDown = (e: PointerEvent) => {
     const el = e.target instanceof Element ? e.target.closest<HTMLElement>(".stick") : null;
     if (!el || stick || options.mode() !== "move") return;
-    stick = { id: e.pointerId, el, offset: { x: 0, y: 0 } };
+    stick = { id: e.pointerId, el };
+    thumb.press(e.pointerId, e.clientX, e.clientY);
     el.setPointerCapture(e.pointerId);
     e.preventDefault();
-    onPointerMove(e);
   };
   const onPointerMove = (e: PointerEvent) => {
     if (e.pointerId !== stick?.id) return;
-    const r = stick.el.getBoundingClientRect();
-    const offset = { x: e.clientX - (r.left + r.width / 2), y: e.clientY - (r.top + r.height / 2) };
-    stick.offset = offset;
+    thumb.move(e.pointerId, e.clientX, e.clientY);
+    const offset = thumb.offset() ?? { x: 0, y: 0 };
     const { radius } = config.joystick;
     const d = Math.hypot(offset.x, offset.y);
     const k = d > radius ? radius / d : 1;
@@ -151,7 +184,7 @@ export function createInput(
       ?.style.setProperty("transform", `translate(${offset.x * k}px, ${offset.y * k}px)`);
   };
   const onPointerEnd = (e: PointerEvent) => {
-    if (e.pointerId === stick?.id) releaseStick();
+    releaseStick(e.pointerId);
   };
 
   const onOrientation = (e: DeviceOrientationEvent) => {
@@ -180,7 +213,8 @@ export function createInput(
   return {
     steering() {
       // The stick wins outright: touch and tilt never add together.
-      if (stick) return { move: stickVector(stick.offset), direct: true };
+      const offset = thumb.offset();
+      if (offset) return { move: stickVector(offset), direct: true };
       const direct = released;
       released = false;
       const parts = [keyboardVector(keys)];
@@ -206,7 +240,7 @@ export function createInput(
     disableTilt,
     reset() {
       keys.clear();
-      releaseStick();
+      if (stick) releaseStick(stick.id);
     },
     dispose() {
       disableTilt();

@@ -272,6 +272,17 @@ p {
   pointer-events: none;
 }
 
+/* Short landscape phones: the stick moves to the corner so the arena keeps its height. */
+@media (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
+  .stick {
+    left: calc(20px + env(safe-area-inset-left));
+    margin-left: 0;
+  }
+  .stage:not([data-phase="attract"]) .toast {
+    bottom: calc(20px + env(safe-area-inset-bottom));
+  }
+}
+
 .stage:not([data-phase="attract"]) .hero {
   top: calc(12px + env(safe-area-inset-top));
   left: calc(12px + env(safe-area-inset-left));

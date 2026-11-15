@@ -176,12 +176,19 @@ export function startGameSession(
     }
   }
 
-  /** Pauses play; a held first-release card appears with the pause panel and counts as seen. */
   function pauseGame(s: GameState) {
     pause(s);
     input.reset();
     publish();
-    if (!promoDue || s.phase !== "paused") return;
+    offerPromo();
+  }
+
+  /**
+   * Shows a held first-release card with the pause panel. It counts as seen, and its timer runs,
+   * only when it is actually on a visible page: a pause from switching tabs waits for the return.
+   */
+  function offerPromo() {
+    if (!promoDue || game?.phase !== "paused" || document.hidden) return;
     promoDue = false;
     writeStorage(ASKED_KEY, "1");
     store.setPromo(true);
@@ -210,30 +217,45 @@ export function startGameSession(
   }
 
   /**
-   * The canvas area clear of the device safe areas (the stage's own padding) and of overlays:
-   * each one in the top half pushes the top edge down, each one in the bottom half lifts the bottom.
+   * The canvas area clear of the device safe areas (the stage's own padding) and of overlays.
+   * Each overlay cuts off whichever side of the area loses the least, so a bar at the top trims
+   * the top and a stick in a landscape corner trims the side. If too little is left to play in,
+   * the overlays are ignored rather than squeezing the game into a sliver.
    */
   function arena(w: number, h: number): Bounds {
     const css = getComputedStyle(stage);
     const box = stage.getBoundingClientRect();
     const originX = box.left + stage.clientLeft;
     const originY = box.top + stage.clientTop;
-    const b = {
+    const safe: Bounds = {
       left: parseFloat(css.paddingLeft) || 0,
       top: parseFloat(css.paddingTop) || 0,
       right: w - (parseFloat(css.paddingRight) || 0),
       bottom: h - (parseFloat(css.paddingBottom) || 0),
     };
+    const area = (b: Bounds) => Math.max(0, b.right - b.left) * Math.max(0, b.bottom - b.top);
+    let b = safe;
     for (const el of stage.querySelectorAll(OVERLAYS)) {
       const r = el.getBoundingClientRect();
       if (!r.width || !r.height) continue;
-      const top = r.top - originY;
-      const bottom = r.bottom - originY;
-      if (r.right - originX <= b.left || r.left - originX >= b.right) continue;
-      if (top + bottom < h) b.top = Math.max(b.top, bottom);
-      else b.bottom = Math.min(b.bottom, top);
+      const o = {
+        left: r.left - originX,
+        top: r.top - originY,
+        right: r.right - originX,
+        bottom: r.bottom - originY,
+      };
+      if (o.right <= b.left || o.left >= b.right || o.bottom <= b.top || o.top >= b.bottom)
+        continue;
+      const cuts: Bounds[] = [
+        { ...b, top: o.bottom },
+        { ...b, bottom: o.top },
+        { ...b, left: o.right },
+        { ...b, right: o.left },
+      ];
+      b = cuts.reduce((best, cut) => (area(cut) > area(best) ? cut : best));
     }
-    return b;
+    const { arenaMin } = config;
+    return b.right - b.left < arenaMin || b.bottom - b.top < arenaMin ? safe : b;
   }
 
   function measure() {
@@ -270,6 +292,7 @@ export function startGameSession(
   const onVisibility = () => {
     last = 0;
     if (document.hidden && game?.phase === "playing") pauseGame(game);
+    else offerPromo();
     kick();
   };
   const scheme = matchMedia("(prefers-color-scheme: dark)");

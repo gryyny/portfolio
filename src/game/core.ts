@@ -202,7 +202,9 @@ export function step(s: GameState, move: Vec, elapsed: number, rng: Rng, direct 
 }
 
 export function pause(s: GameState): void {
-  if (s.phase === "playing") s.phase = "paused";
+  if (s.phase !== "playing") return;
+  s.phase = "paused";
+  stopPlayer(s);
 }
 
 export function resume(s: GameState): void {
@@ -266,6 +268,8 @@ function simulate(
   if (s.safety > 0) s.safety -= elapsed;
   moveBugs(s, dt, elapsed, rng);
   s.gate.spin += elapsed;
+  // Age the chip first, so one that ran out during this frame cannot be picked up in it.
+  ageChip(s, elapsed, rng);
   sweep(s, to, rng);
   if (s.phase === "quiz" || s.phase === "over") return;
 
@@ -282,29 +286,99 @@ function simulate(
   }
 }
 
+type Contact = { t: number } & (
+  { kind: "bug"; bug: Bug } | { kind: "check"; check: Vec } | { kind: "chip" } | { kind: "gate" }
+);
+
 /**
- * Moves the player to `to` in short hops and resolves what it touches in the order it gets there.
+ * Moves the player to `to` and resolves what it touches in the exact order it gets there.
  * A quiz, game over or release changes the world, so the rest of the movement is dropped.
  */
 function sweep(s: GameState, to: Vec, rng: Rng): void {
+  const from = { x: s.player.x, y: s.player.y };
+  const r = config.player.radius;
+  const contacts: Contact[] = [];
+  const meet = (target: Vec, reach: number, contact: Contact) => {
+    const t = entry(from, to, target, reach);
+    if (t !== null) contacts.push({ ...contact, t });
+  };
+  if (s.phase === "playing") {
+    for (const bug of s.bugs) meet(bug, r + config.bugs.radius, { t: 0, kind: "bug", bug });
+  }
+  const checkReach = r + config.checks.radius + config.checks.slack;
+  for (const check of s.checks) meet(check, checkReach, { t: 0, kind: "check", check });
+  if (s.chip) meet(s.chip, r + config.perk.radius, { t: 0, kind: "chip" });
+  meet(s.gate, r + config.gate.radius, { t: 0, kind: "gate" });
+  contacts.sort((a, b) => a.t - b.t);
+
+  for (const contact of contacts) {
+    moveAlong(s, from, to, contact.t);
+    if (resolve(s, contact, rng)) return;
+  }
+  moveAlong(s, from, to, 1);
+}
+
+/** The earliest fraction of the move from `from` to `to` that is within `reach` of `c`, or null. */
+function entry(from: Vec, to: Vec, c: Vec, reach: number): number | null {
+  const fx = from.x - c.x;
+  const fy = from.y - c.y;
+  const inside = fx * fx + fy * fy - reach * reach;
+  if (inside < 0) return 0;
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const a = dx * dx + dy * dy;
+  if (a === 0) return null;
+  const b = 2 * (fx * dx + fy * dy);
+  const disc = b * b - 4 * a * inside;
+  if (disc < 0) return null;
+  const t = (-b - Math.sqrt(disc)) / (2 * a);
+  return t >= 0 && t <= 1 ? t : null;
+}
+
+function moveAlong(s: GameState, from: Vec, to: Vec, t: number): void {
   const p = s.player;
-  const from = { x: p.x, y: p.y };
-  const hops = Math.max(1, Math.ceil(distance(from, to) / config.player.sweepStep));
-  for (let i = 1; i <= hops; i++) {
-    p.x = from.x + ((to.x - from.x) * i) / hops;
-    p.y = from.y + ((to.y - from.y) * i) / hops;
-    const last = s.trail.at(-1);
-    if (!last || distance(p, last) > config.player.trailStep) {
-      s.trail.push({ x: p.x, y: p.y });
-      if (s.trail.length > config.player.trailLength) s.trail.shift();
+  p.x = from.x + (to.x - from.x) * t;
+  p.y = from.y + (to.y - from.y) * t;
+  const last = s.trail.at(-1);
+  if (!last || distance(p, last) > config.player.trailStep) {
+    s.trail.push({ x: p.x, y: p.y });
+    if (s.trail.length > config.player.trailLength) s.trail.shift();
+  }
+}
+
+/** Applies one contact, judged by the state at that moment; true when movement must stop. */
+function resolve(s: GameState, contact: Contact, rng: Rng): boolean {
+  switch (contact.kind) {
+    case "bug": {
+      const { bug } = contact;
+      const harmless = s.safety > 0 || s.shield > 0 || bug.grace > 0;
+      if (harmless || !s.bugs.includes(bug)) return false;
+      if (s.rollbacks === 1) {
+        startQuiz(s, bug, rng);
+        return true;
+      }
+      damage(s);
+      return s.phase === "over";
     }
-    if (s.phase === "playing" && touchBugs(s, rng)) return;
-    collectChecks(s, rng);
-    if (s.gate.open && distance(s.gate, p) < config.gate.radius + config.player.radius) {
+    case "check": {
+      const i = s.checks.indexOf(contact.check);
+      if (i < 0) return false;
+      s.checks.splice(i, 1);
+      s.collected++;
+      s.events.push({ type: "check", at: contact.check });
+      if (s.collected >= s.required) {
+        s.gate.open = true;
+        s.events.push({ type: "gateOpen" });
+      } else fillChecks(s, rng);
+      return false;
+    }
+    case "chip":
+      pickChip(s, rng);
+      return false;
+    case "gate":
+      if (!s.gate.open) return false;
       ship(s, rng);
-      return;
-    }
-    pickChip(s, rng);
+      return true;
   }
 }
 
@@ -341,36 +415,6 @@ function moveBugs(s: GameState, dt: number, elapsed: number, rng: Rng): void {
       const centre = boundsCentre(s);
       bug.heading = Math.atan2(centre.y - bug.y, centre.x - bug.x) + (rng() - 0.5) * 1.2;
     }
-  }
-}
-
-/** Returns true when a hit opened the quiz or ended the run, so movement must stop. */
-function touchBugs(s: GameState, rng: Rng): boolean {
-  for (const bug of s.bugs) {
-    const harmless = s.safety > 0 || s.shield > 0 || bug.grace > 0;
-    if (harmless || distance(s.player, bug) >= config.player.radius + config.bugs.radius) continue;
-    if (s.rollbacks === 1) {
-      startQuiz(s, bug, rng);
-      return true;
-    }
-    damage(s);
-    if (s.phase === "over") return true;
-  }
-  return false;
-}
-
-function collectChecks(s: GameState, rng: Rng): void {
-  const reach = config.player.radius + config.checks.radius + config.checks.slack;
-  for (let i = s.checks.length - 1; i >= 0; i--) {
-    const c = s.checks[i];
-    if (!c || distance(c, s.player) >= reach) continue;
-    s.checks.splice(i, 1);
-    s.collected++;
-    s.events.push({ type: "check", at: c });
-    if (s.collected >= s.required) {
-      s.gate.open = true;
-      s.events.push({ type: "gateOpen" });
-    } else fillChecks(s, rng);
   }
 }
 
@@ -413,18 +457,21 @@ function updateChip(s: GameState, dt: number, rng: Rng): void {
   if (!s.chip && s.shield <= 0 && s.chipTimer <= 0) {
     s.chip = { ...spot(s, perk.spawnDistance, rng), life: perk.lifeS };
   }
+}
+
+function ageChip(s: GameState, dt: number, rng: Rng): void {
   const chip = s.chip;
   if (!chip) return;
   chip.life -= dt;
   if (chip.life > 0) return;
   s.chip = null;
-  s.chipTimer = between(rng, perk.afterExpiryS);
+  s.chipTimer = between(rng, config.perk.afterExpiryS);
 }
 
 function pickChip(s: GameState, rng: Rng): void {
   const perk = config.perk;
   const chip = s.chip;
-  if (!chip || distance(chip, s.player) >= config.player.radius + perk.radius) return;
+  if (!chip) return;
   s.chip = null;
   s.chipTimer = between(rng, perk.afterPickupS);
   const at = { x: chip.x, y: chip.y };
@@ -476,7 +523,14 @@ function startQuiz(s: GameState, bug: Bug, rng: Rng): void {
     correct: false,
   };
   s.phase = "quiz";
+  // The world freezes; momentum must not carry over to the moment play resumes.
+  stopPlayer(s);
   s.events.push({ type: "quizStart", at: { x: bug.x, y: bug.y } });
+}
+
+function stopPlayer(s: GameState): void {
+  s.player.vx = 0;
+  s.player.vy = 0;
 }
 
 function tickQuiz(s: GameState, q: Quiz, elapsed: number): void {

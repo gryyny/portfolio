@@ -4,9 +4,10 @@ export const config = {
   scaleReference: 520,
   scaleRange: [0.65, 1.25],
   margin: 40,
+  // The smallest clear area worth keeping; if overlays leave less, they are ignored instead.
+  arenaMin: 160,
 
-  // sweepStep: the longest hop between collision tests, so a fast move cannot skip anything.
-  player: { radius: 11, speed: 270, response: 7, trailStep: 7, trailLength: 70, sweepStep: 4 },
+  player: { radius: 11, speed: 270, response: 7, trailStep: 7, trailLength: 70 },
   // slack: extra reach for picking up a check, on top of both radii.
   checks: { start: 3, max: 7, onField: 3, radius: 9, spawnDistance: 90, slack: 2 },
   gate: { radius: 26, spawnDistance: 200 },

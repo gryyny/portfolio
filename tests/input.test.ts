@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { config } from "@/game/config";
-import { screenTilt, stickVector, tiltVector } from "@/game/input";
+import { createStickTracker, screenTilt, stickVector, tiltVector } from "@/game/input";
 
 // Device tilted top away from the user (beta) and right side down (gamma), by different angles
 // so a swapped axis fails.
@@ -43,20 +43,32 @@ describe("tiltVector", () => {
   });
 });
 
-describe("stickVector", () => {
+describe("stick", () => {
   const { radius, deadZone } = config.joystick;
 
-  it("is zero when a thumb rests on or near the centre, so touching never moves the player", () => {
-    expect(stickVector({ x: 0, y: 0 })).toEqual({ x: 0, y: 0 });
-    expect(stickVector({ x: radius * deadZone, y: 0 })).toEqual({ x: 0, y: 0 });
+  it("is neutral where the thumb lands and steers only by how far it then moves", () => {
+    const thumb = createStickTracker();
+    thumb.press(1, 230, 760);
+    expect(stickVector(thumb.offset() ?? { x: 9, y: 9 })).toEqual({ x: 0, y: 0 });
+    thumb.move(1, 230 + radius * deadZone, 760);
+    expect(stickVector(thumb.offset() ?? { x: 9, y: 9 })).toEqual({ x: 0, y: 0 });
+    thumb.move(1, 230, 760 - radius * 3);
+    const up = stickVector(thumb.offset() ?? { x: 0, y: 0 });
+    expect(up.x).toBeCloseTo(0);
+    expect(up.y).toBeCloseTo(-1);
   });
 
-  it("reaches full speed at the radius, clamps beyond it and keeps the direction", () => {
-    expect(stickVector({ x: radius, y: 0 })).toEqual({ x: 1, y: 0 });
-    const far = stickVector({ x: 0, y: -radius * 3 });
-    expect(far.x).toBeCloseTo(0);
-    expect(far.y).toBeCloseTo(-1);
-    const half = radius * deadZone + (radius - radius * deadZone) / 2;
-    expect(stickVector({ x: half, y: 0 }).x).toBeCloseTo(0.5);
+  it("ends steering on release, cancel or lost capture and ignores other fingers", () => {
+    const thumb = createStickTracker();
+    thumb.press(1, 100, 100);
+    thumb.press(2, 300, 300);
+    thumb.move(2, 400, 300);
+    expect(thumb.offset()).toEqual({ x: 0, y: 0 });
+    expect(thumb.release(2)).toBe(false);
+    expect(thumb.offset()).not.toBeNull();
+    expect(thumb.release(1)).toBe(true);
+    expect(thumb.offset()).toBeNull();
+    thumb.move(1, 160, 100);
+    expect(thumb.offset()).toBeNull();
   });
 });

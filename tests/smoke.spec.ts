@@ -74,6 +74,12 @@ test("a Play click made while the game engine is still loading starts the game",
   expect(delayed).toBeGreaterThan(0);
 });
 
+test("serves the CV download as a PDF", async ({ request }) => {
+  const cv = await request.get("/Andrii_Hrynchuk_CV.pdf");
+  expect(cv.ok()).toBe(true);
+  expect((await cv.body()).subarray(0, 5).toString()).toBe("%PDF-");
+});
+
 test.describe("without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 

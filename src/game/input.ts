@@ -99,16 +99,17 @@ export function createInput(
     if (e.target instanceof Element && e.target.closest("input, textarea, select")) return;
     const key = e.key.toLowerCase();
     if (key === "p" || key === "escape") {
-      options.onCommand({ type: "pause" });
       e.preventDefault();
+      // Holding a key must not toggle pause or answer repeatedly.
+      if (!e.repeat) options.onCommand({ type: "pause" });
     } else if (mode !== "move") {
       return;
     } else if (key in MOVES) {
       keys.add(key);
       e.preventDefault();
     } else if (key === "1" || key === "2" || key === "3") {
-      options.onCommand({ type: "answer", index: Number(key) - 1 });
       e.preventDefault();
+      if (!e.repeat) options.onCommand({ type: "answer", index: Number(key) - 1 });
     }
   };
   const onKeyUp = (e: KeyboardEvent) => keys.delete(e.key.toLowerCase());

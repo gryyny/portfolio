@@ -33,7 +33,10 @@ test("plays, pauses, exits and restarts under the real CSP, without analytics be
   await paused.getByRole("button", { name: "Resume" }).click();
   await expect(paused).toBeHidden();
 
-  await page.keyboard.press("p");
+  // A held key auto-repeats; only the first keydown may toggle pause.
+  await page.keyboard.down("p");
+  await page.keyboard.down("p");
+  await page.keyboard.up("p");
   await expect(paused).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(paused).toBeHidden();

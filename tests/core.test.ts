@@ -180,6 +180,17 @@ describe("quiz", () => {
     expect(s.quiz?.correct).toBe(false);
   });
 
+  it("counts the active time carried by ignored answers during feedback", () => {
+    const { s, rng } = playing();
+    openQuiz(s, rng);
+    step(s, still, 0.2, rng);
+    answer(s, s.quiz?.choices.find((c) => c !== s.quiz?.right) ?? "", 0);
+    answer(s, "again", 0.4);
+    answer(s, "again", 0.4);
+    step(s, still, 0.101, rng);
+    expect(s.phase).toBe("over");
+  });
+
   it("ignores answers inside the guard window and after the first answer", () => {
     const { s, rng } = playing();
     openQuiz(s, rng);

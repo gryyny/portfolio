@@ -12,7 +12,8 @@ export interface Question {
   topic: string;
   question: string;
   right: string;
-  wrong: readonly [string, string];
+  /** Exactly two; tests/questions.test.ts enforces the bank format. */
+  wrong: readonly string[];
 }
 
 export type Bug = Vec & {
@@ -27,7 +28,6 @@ export type Bug = Vec & {
 
 interface Quiz {
   bugId: number;
-  at: Vec;
   topic: string;
   question: string;
   right: string;
@@ -43,7 +43,7 @@ export type GameEvent =
   | { type: "check"; at: Vec }
   | { type: "gateOpen" }
   | { type: "release"; at: Vec; version: string; releases: number }
-  | { type: "hit"; at: Vec; rollbacks: number }
+  | { type: "hit"; at: Vec }
   | { type: "fixed"; at: Vec; by: "shield" | "quiz" }
   | { type: "perk"; at: Vec; outcome: "shield" | "bug" }
   | { type: "quizStart"; at: Vec }
@@ -182,15 +182,15 @@ export function resume(s: GameState): void {
   if (s.phase === "paused") s.phase = "playing";
 }
 
-/** `elapsed` is the active time since the last step, so an answer after the deadline cannot win. */
+/**
+ * `elapsed` is the active time since the last step. It is always applied to the quiz clock first,
+ * even when the answer is ignored, so a late answer cannot win and ignored input loses no time.
+ */
 export function answer(s: GameState, choice: string, elapsed: number): void {
   const q = s.quiz;
-  if (s.phase !== "quiz" || !q || q.feedback > 0) return;
-  q.remaining -= elapsed;
-  if (q.remaining <= 0) {
-    reveal(s, q, null);
-    return;
-  }
+  if (s.phase !== "quiz" || !q) return;
+  tickQuiz(s, q, elapsed);
+  if (s.quiz !== q || q.feedback > 0) return;
   if (config.quiz.deadlineS - q.remaining < config.quiz.guardS) return;
   reveal(s, q, choice);
 }
@@ -311,7 +311,7 @@ function damage(s: GameState): void {
     bug.vx = ((bug.x - s.player.x) / d) * b.pushSpeed * s.scale;
     bug.vy = ((bug.y - s.player.y) / d) * b.pushSpeed * s.scale;
   }
-  s.events.push({ type: "hit", at: { x: s.player.x, y: s.player.y }, rollbacks: s.rollbacks });
+  s.events.push({ type: "hit", at: { x: s.player.x, y: s.player.y } });
   if (s.rollbacks <= 0) {
     s.phase = "over";
     s.events.push({ type: "gameOver", releases: s.releases, version: versionLabel(s.version) });
@@ -389,7 +389,6 @@ function startQuiz(s: GameState, bug: Bug, rng: Rng): void {
   const wrong = shuffle([...question.wrong], rng).slice(0, wrongCount);
   s.quiz = {
     bugId: bug.id,
-    at: { x: bug.x, y: bug.y },
     topic: question.topic,
     question: question.question,
     right: question.right,

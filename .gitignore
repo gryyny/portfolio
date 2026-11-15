@@ -12,3 +12,7 @@ playwright-report/
 test-results/
 .lighthouseci/
 *.log
+
+# Local-only planning files, never published
+/spec/
+/CLAUDE.local.md

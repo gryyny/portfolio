@@ -46,6 +46,7 @@ jobs:
       group: deploy-production
       cancel-in-progress: false
     steps:
+      # Saves an upload; the server-side promote refuses stale runs either way.
       - name: Skip if a newer commit is already on main
         id: fresh
         run: |
@@ -67,7 +68,8 @@ jobs:
           printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy && chmod 600 ~/.ssh/deploy
           printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
           ssh_cmd="ssh -i ~/.ssh/deploy -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes"
+          # deploy/portfolio-deploy.py is the key's forced command on the server.
           # Hashed assets first, append-only, so open tabs can still load older chunks.
           rsync -a --ignore-existing -e "$ssh_cmd" out/_next/static/ "$TARGET:shared/_next/static/"
           rsync -a -e "$ssh_cmd" out/ "$TARGET:releases/$GITHUB_SHA/"
-          $ssh_cmd "$TARGET" "promote $GITHUB_SHA"
+          $ssh_cmd "$TARGET" "promote $GITHUB_SHA $GITHUB_RUN_NUMBER"

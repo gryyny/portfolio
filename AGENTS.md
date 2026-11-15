@@ -10,6 +10,13 @@ A one-page portfolio for gryyny.si: Next.js 16 static export, React 19, strict T
 - `pnpm lighthouse`: Lighthouse CI on `out/`, 3 runs, median asserted. Required in CI, on demand locally.
 - Smoke tests use the installed Chrome locally; CI installs Playwright's Chromium.
 
+## Deploy
+
+- CI deploys only when the repository variable `DEPLOY_ENABLED` is `true`, and only the `out/` artifact that passed `pnpm check` and `pnpm lighthouse`.
+- On the VPS the deploy key's forced command is `deploy/portfolio-deploy.py` (installed as `/usr/local/bin/portfolio-deploy`, `restrict` in `authorized_keys`, needs python3 and rsync's `rrsync`). It allows uploads to `shared/_next/static/` and `releases/<commit>/`, `promote <commit> <run>` and `rollback`, nothing else. `tests/deploy.test.ts` covers it.
+- Caddy serves `/srv/portfolio/current`; the site blocks and the one-time mount are in `deploy/Caddyfile`.
+- `pnpm verify:consent` builds a fixture export with placeholder Firebase settings and checks the consent gate in Chrome with all Google endpoints answered locally. It is not part of `pnpm check`.
+
 ## Boundaries
 
 - `src/game/core.ts` holds every game rule. It reads no DOM, storage, clock or `Math.random`; time and randomness are passed in. `config.ts` holds every gameplay number.

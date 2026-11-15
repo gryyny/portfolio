@@ -1,0 +1,53 @@
+# Site blocks for gryyny.si, added to the food diary's Caddyfile on the same VPS.
+#
+# One-time change in the diary's compose.yaml (caddy service only):
+#   volumes:
+#     - /srv/portfolio:/srv/portfolio:ro
+# Mount the parent directory, not `current`, so later symlink swaps are visible inside the container.
+# A new mount needs the Caddy container recreated (a reload cannot add it), which can drop proxied
+# requests for a moment. Validate first, then recreate only Caddy, keeping its data/config volumes:
+#   docker compose run --rm --no-deps caddy caddy validate --config /etc/caddy/Caddyfile
+#   docker compose up -d --no-deps caddy
+# Then check the diary page, its API health and its auth proxy. Later portfolio releases need no reload.
+
+gryyny.si {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		Permissions-Policy "accelerometer=(self), gyroscope=(self), camera=(), microphone=(), geolocation=()"
+		# The rest of the CSP is a per-page meta tag; frame-ancestors only works as a header.
+		Content-Security-Policy "frame-ancestors 'none'"
+	}
+
+	# Next.js names the generated preview image without an extension.
+	@ogImage path /opengraph-image
+	header @ogImage Content-Type image/png
+
+	# Hashed assets come from the append-only shared directory, so tabs opened on an older
+	# release can still load their chunks after a newer one is promoted.
+	handle /_next/static/* {
+		root * /srv/portfolio/shared
+		header Cache-Control "public, max-age=31536000, immutable"
+		file_server
+	}
+
+	handle {
+		root * /srv/portfolio/current
+		header Cache-Control "public, max-age=0, must-revalidate"
+		try_files {path} {path}.html {path}/index.html
+		file_server
+	}
+
+	handle_errors {
+		root * /srv/portfolio/current
+		rewrite * /404.html
+		file_server
+	}
+}
+
+www.gryyny.si {
+	redir https://gryyny.si{uri} permanent
+}

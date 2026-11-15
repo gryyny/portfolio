@@ -1,21 +1,28 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Instrument_Sans, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import type { ReactNode } from "react";
 import { profile, siteUrl } from "@/content/profile";
 import "./globals.css";
 
-const display = Bricolage_Grotesque({
-  subsets: ["latin"],
-  weight: ["600", "800"],
+// Local subsets (Latin plus the UI symbols) of OFL fonts; licenses sit next to the files.
+// Display is one static 800 cut; body and mono keep their 400-700 weight axis.
+const display = localFont({
+  src: "../fonts/bricolage-grotesque-800.woff2",
+  weight: "800",
   variable: "--font-display",
 });
-const body = Instrument_Sans({ subsets: ["latin"], variable: "--font-body" });
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "600"],
+const body = localFont({
+  src: "../fonts/instrument-sans.woff2",
+  weight: "400 700",
+  variable: "--font-body",
+});
+const mono = localFont({
+  src: "../fonts/jetbrains-mono.woff2",
+  weight: "400 700",
   variable: "--font-mono",
   // Labels and the canvas only; not worth competing with first paint.
   preload: false,
+  adjustFontFallback: false,
 });
 
 const title = `${profile.name} · ${profile.jobTitle}`;

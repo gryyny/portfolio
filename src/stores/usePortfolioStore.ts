@@ -30,6 +30,8 @@ export interface Result {
 
 interface PortfolioState {
   hud: Hud | null;
+  /** The page has hydrated, so Play works (the engine may still be loading). */
+  ready: boolean;
   result: Result | null;
   toast: { id: number; text: string } | null;
   promo: boolean;
@@ -37,6 +39,7 @@ interface PortfolioState {
   tiltOn: boolean;
   immersive: boolean;
   setHud: (hud: Hud) => void;
+  setReady: (ready: boolean) => void;
   setResult: (result: Result) => void;
   showToast: (text: string) => void;
   setPromo: (promo: boolean) => void;
@@ -47,12 +50,16 @@ interface PortfolioState {
 
 export const usePortfolioStore = create<PortfolioState>()((set) => ({
   hud: null,
+  ready: false,
   result: null,
   toast: null,
   promo: false,
   mailOpen: false,
   tiltOn: false,
   immersive: false,
+  setReady: (ready) => {
+    set({ ready });
+  },
   setHud: (hud) => {
     set({ hud });
   },

@@ -55,6 +55,25 @@ test("plays, pauses, exits and restarts under the real CSP, without analytics be
   expect(seen.errors).toEqual([]);
 });
 
+test("a Play click made while the game engine is still loading starts the game", async ({
+  page,
+}) => {
+  const html = await (await page.request.get("/")).text();
+  const initial = new Set(html.match(/\/_next\/static\/chunks\/[^"]+\.js/g));
+  let delayed = 0;
+  await page.route("**/_next/static/chunks/*.js", async (route) => {
+    if (!initial.has(new URL(route.request().url()).pathname)) {
+      delayed++;
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+    }
+    await route.continue();
+  });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Play: ship a release" }).click();
+  await expect(page.locator(".hud")).toBeVisible();
+  expect(delayed).toBeGreaterThan(0);
+});
+
 test.describe("without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 

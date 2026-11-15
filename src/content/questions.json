@@ -3,2880 +3,1920 @@
     "topic": "JS",
     "question": "typeof null",
     "right": "object",
-    "wrong": [
-      "null",
-      "undefined"
-    ]
+    "wrong": ["null", "undefined"]
   },
   {
     "topic": "JS",
     "question": "0.1 + 0.2 === 0.3",
     "right": "false",
-    "wrong": [
-      "true",
-      "TypeError"
-    ]
+    "wrong": ["true", "TypeError"]
   },
   {
     "topic": "JS",
     "question": "'5' - 2",
     "right": "3",
-    "wrong": [
-      "'52'",
-      "NaN"
-    ]
+    "wrong": ["'52'", "NaN"]
   },
   {
     "topic": "JS",
     "question": "'5' + 2",
     "right": "'52'",
-    "wrong": [
-      "7",
-      "NaN"
-    ]
+    "wrong": ["7", "NaN"]
   },
   {
     "topic": "JS",
     "question": "NaN === NaN",
     "right": "false",
-    "wrong": [
-      "true",
-      "NaN"
-    ]
+    "wrong": ["true", "NaN"]
   },
   {
     "topic": "JS",
     "question": "Block-scoped declaration",
     "right": "let",
-    "wrong": [
-      "var",
-      "function"
-    ]
+    "wrong": ["var", "function"]
   },
   {
     "topic": "JS",
     "question": "Does not mutate the array",
     "right": "map",
-    "wrong": [
-      "splice",
-      "sort"
-    ]
+    "wrong": ["splice", "sort"]
   },
   {
     "topic": "JS",
     "question": "=== compares",
     "right": "value and type",
-    "wrong": [
-      "value only",
-      "references only"
-    ]
+    "wrong": ["value only", "references only"]
   },
   {
     "topic": "JS",
     "question": "Promise.all rejects when",
     "right": "any one rejects",
-    "wrong": [
-      "all reject",
-      "the last rejects"
-    ]
+    "wrong": ["all reject", "the last rejects"]
   },
   {
     "topic": "TS",
     "question": "Safe \"anything\" type",
     "right": "unknown",
-    "wrong": [
-      "any",
-      "never"
-    ]
+    "wrong": ["any", "never"]
   },
   {
     "topic": "TS",
     "question": "Type of a function that never returns",
     "right": "never",
-    "wrong": [
-      "void",
-      "null"
-    ]
+    "wrong": ["void", "null"]
   },
   {
     "topic": "React",
     "question": "Update state from previous value",
     "right": "setN(n => n + 1)",
-    "wrong": [
-      "n++",
-      "setN(n++)"
-    ]
+    "wrong": ["n++", "setN(n++)"]
   },
   {
     "topic": "React",
     "question": "Hook for side effects",
     "right": "useEffect",
-    "wrong": [
-      "useMemo",
-      "useRef"
-    ]
+    "wrong": ["useMemo", "useRef"]
   },
   {
     "topic": "React",
     "question": "List items need a stable",
     "right": "key",
-    "wrong": [
-      "ref",
-      "id prop"
-    ]
+    "wrong": ["ref", "id prop"]
   },
   {
     "topic": "React",
     "question": "Call hooks inside an if?",
     "right": "No",
-    "wrong": [
-      "Yes",
-      "Only in effects"
-    ]
+    "wrong": ["Yes", "Only in effects"]
   },
   {
     "topic": "Git",
     "question": "Undo last commit, keep changes",
     "right": "reset --soft HEAD~1",
-    "wrong": [
-      "reset --hard HEAD~1",
-      "git revert HEAD"
-    ]
+    "wrong": ["reset --hard HEAD~1", "git revert HEAD"]
   },
   {
     "topic": "Git",
     "question": "Download remote changes without merging",
     "right": "git fetch",
-    "wrong": [
-      "git pull",
-      "git clone"
-    ]
+    "wrong": ["git pull", "git clone"]
   },
   {
     "topic": "Git",
     "question": "Fix the last commit message",
     "right": "commit --amend",
-    "wrong": [
-      "git revert",
-      "git stash"
-    ]
+    "wrong": ["git revert", "git stash"]
   },
   {
     "topic": "HTTP",
     "question": "Status: not found",
     "right": "404",
-    "wrong": [
-      "500",
-      "403"
-    ]
+    "wrong": ["500", "403"]
   },
   {
     "topic": "HTTP",
     "question": "Status: too many requests",
     "right": "429",
-    "wrong": [
-      "418",
-      "503"
-    ]
+    "wrong": ["418", "503"]
   },
   {
     "topic": "HTTP",
     "question": "Status: not signed in",
     "right": "401",
-    "wrong": [
-      "403",
-      "400"
-    ]
+    "wrong": ["403", "400"]
   },
   {
     "topic": "HTTP",
     "question": "Idempotent method",
     "right": "PUT",
-    "wrong": [
-      "POST",
-      "PATCH"
-    ]
+    "wrong": ["POST", "PATCH"]
   },
   {
     "topic": "HTTP",
     "question": "CORS is enforced by",
     "right": "the browser",
-    "wrong": [
-      "the server",
-      "the CDN"
-    ]
+    "wrong": ["the server", "the CDN"]
   },
   {
     "topic": "HTTP",
     "question": "Default HTTPS port",
     "right": "443",
-    "wrong": [
-      "80",
-      "8080"
-    ]
+    "wrong": ["80", "8080"]
   },
   {
     "topic": "SQL",
     "question": "Filter after GROUP BY",
     "right": "HAVING",
-    "wrong": [
-      "WHERE",
-      "ORDER BY"
-    ]
+    "wrong": ["WHERE", "ORDER BY"]
   },
   {
     "topic": "SQL",
     "question": "Delete all rows, keep the table",
     "right": "TRUNCATE",
-    "wrong": [
-      "DROP",
-      "ALTER"
-    ]
+    "wrong": ["DROP", "ALTER"]
   },
   {
     "topic": "Web3",
     "question": "Solidity: read-only function",
     "right": "view",
-    "wrong": [
-      "payable",
-      "external"
-    ]
+    "wrong": ["payable", "external"]
   },
   {
     "topic": "Web3",
     "question": "1 ether in wei",
     "right": "10^18",
-    "wrong": [
-      "10^9",
-      "10^6"
-    ]
+    "wrong": ["10^9", "10^6"]
   },
   {
     "topic": "Web3",
     "question": "ERC-20 tokens are",
     "right": "fungible",
-    "wrong": [
-      "non-fungible",
-      "soulbound"
-    ]
+    "wrong": ["non-fungible", "soulbound"]
   },
   {
     "topic": "Web3",
     "question": "Gas payer of a plain Ethereum tx",
     "right": "the sender",
-    "wrong": [
-      "the receiver",
-      "the validator"
-    ]
+    "wrong": ["the receiver", "the validator"]
   },
   {
     "topic": "Web3",
     "question": "Reentrancy defense",
     "right": "checks-effects-interactions",
-    "wrong": [
-      "interactions first",
-      "more gas"
-    ]
+    "wrong": ["interactions first", "more gas"]
   },
   {
     "topic": "Ops",
     "question": "File that builds a Docker image",
     "right": "Dockerfile",
-    "wrong": [
-      "compose.yaml",
-      ".dockerignore"
-    ]
+    "wrong": ["compose.yaml", ".dockerignore"]
   },
   {
     "topic": "CS",
     "question": "Binary search time",
     "right": "O(log n)",
-    "wrong": [
-      "O(n)",
-      "O(n log n)"
-    ]
+    "wrong": ["O(n)", "O(n log n)"]
   },
   {
     "topic": "CS",
     "question": "A stack is",
     "right": "LIFO",
-    "wrong": [
-      "FIFO",
-      "random access only"
-    ]
+    "wrong": ["FIFO", "random access only"]
   },
   {
     "topic": "CS",
     "question": "Regex: one or more",
     "right": "+",
-    "wrong": [
-      "*",
-      "?"
-    ]
+    "wrong": ["*", "?"]
   },
   {
     "topic": "AI",
     "question": "LLM context is measured in",
     "right": "tokens",
-    "wrong": [
-      "lines",
-      "bytes"
-    ]
+    "wrong": ["lines", "bytes"]
   },
   {
     "topic": "AI",
     "question": "More predictable LLM output: lower the",
     "right": "temperature",
-    "wrong": [
-      "context size",
-      "max tokens"
-    ]
+    "wrong": ["context size", "max tokens"]
   },
   {
     "topic": "JS",
     "question": "[1, 2, 3].at(-1)",
     "right": "3",
-    "wrong": [
-      "1",
-      "undefined"
-    ]
+    "wrong": ["1", "undefined"]
   },
   {
     "topic": "JS",
     "question": "A Map key can be of which type?",
     "right": "Any value",
-    "wrong": [
-      "Strings only",
-      "Strings and symbols"
-    ]
+    "wrong": ["Strings only", "Strings and symbols"]
   },
   {
     "topic": "JS",
     "question": "[10, 9, 1].sort()",
     "right": "[1, 10, 9]",
-    "wrong": [
-      "[1, 9, 10]",
-      "[10, 9, 1]"
-    ]
+    "wrong": ["[1, 9, 10]", "[10, 9, 1]"]
   },
   {
     "topic": "JS",
     "question": "0 ?? 'x'",
     "right": "0",
-    "wrong": [
-      "'x'",
-      "null"
-    ]
+    "wrong": ["'x'", "null"]
   },
   {
     "topic": "JS",
     "question": "Optional chaining operator",
     "right": "?.",
-    "wrong": [
-      "??",
-      "?:"
-    ]
+    "wrong": ["??", "?:"]
   },
   {
     "topic": "JS",
     "question": "Waits for all promises, even rejected ones",
     "right": "Promise.allSettled()",
-    "wrong": [
-      "Promise.race()",
-      "Promise.any()"
-    ]
+    "wrong": ["Promise.race()", "Promise.any()"]
   },
   {
     "topic": "JS",
     "question": "First promise to fulfill wins, rejects ignored",
     "right": "Promise.any()",
-    "wrong": [
-      "Promise.race()",
-      "Promise.all()"
-    ]
+    "wrong": ["Promise.race()", "Promise.all()"]
   },
   {
     "topic": "JS",
     "question": "Runs first: setTimeout 0 or a .then callback?",
     "right": "The .then callback",
-    "wrong": [
-      "The setTimeout callback",
-      "Order is random"
-    ]
+    "wrong": ["The setTimeout callback", "Order is random"]
   },
   {
     "topic": "JS",
     "question": "Does Object.freeze freeze nested objects?",
     "right": "No, it is shallow",
-    "wrong": [
-      "Yes, deeply",
-      "Only nested arrays"
-    ]
+    "wrong": ["Yes, deeply", "Only nested arrays"]
   },
   {
     "topic": "JS",
     "question": "Read a let variable before its declaration",
     "right": "ReferenceError",
-    "wrong": [
-      "undefined",
-      "null"
-    ]
+    "wrong": ["undefined", "null"]
   },
   {
     "topic": "JS",
     "question": "Call a function declaration above its line?",
     "right": "Works, it is hoisted",
-    "wrong": [
-      "ReferenceError",
-      "Only in strict mode"
-    ]
+    "wrong": ["ReferenceError", "Only in strict mode"]
   },
   {
     "topic": "JS",
     "question": "Reassign a const variable",
     "right": "TypeError",
-    "wrong": [
-      "SyntaxError",
-      "Silently ignored"
-    ]
+    "wrong": ["SyntaxError", "Silently ignored"]
   },
   {
     "topic": "JS",
     "question": "Arrow functions take 'this' from",
     "right": "The enclosing scope",
-    "wrong": [
-      "The caller",
-      "The global object"
-    ]
+    "wrong": ["The caller", "The global object"]
   },
   {
     "topic": "JS",
     "question": "['1', '2', '3'].map(parseInt)",
     "right": "[1, NaN, NaN]",
-    "wrong": [
-      "[1, 2, 3]",
-      "[NaN, NaN, NaN]"
-    ]
+    "wrong": ["[1, 2, 3]", "[NaN, NaN, NaN]"]
   },
   {
     "topic": "JS",
     "question": "ES2023 sort that returns a new array",
     "right": "toSorted()",
-    "wrong": [
-      "sort()",
-      "sorted()"
-    ]
+    "wrong": ["sort()", "sorted()"]
   },
   {
     "topic": "JS",
     "question": "Number.isNaN('abc')",
     "right": "false",
-    "wrong": [
-      "true",
-      "NaN"
-    ]
+    "wrong": ["true", "NaN"]
   },
   {
     "topic": "JS",
     "question": "((a, b = 2) => {}).length",
     "right": "1",
-    "wrong": [
-      "2",
-      "0"
-    ]
+    "wrong": ["2", "0"]
   },
   {
     "topic": "JS",
     "question": "JSON.stringify({ a: undefined })",
     "right": "'{}'",
-    "wrong": [
-      "'{\"a\":null}'",
-      "'{\"a\":undefined}'"
-    ]
+    "wrong": ["'{\"a\":null}'", "'{\"a\":undefined}'"]
   },
   {
     "topic": "JS",
     "question": "Return value of any async function",
     "right": "A Promise",
-    "wrong": [
-      "The raw value",
-      "undefined"
-    ]
+    "wrong": ["The raw value", "undefined"]
   },
   {
     "topic": "JS",
     "question": "Top-level await works in",
     "right": "ES modules",
-    "wrong": [
-      "Classic scripts",
-      "Any sync function"
-    ]
+    "wrong": ["Classic scripts", "Any sync function"]
   },
   {
     "topic": "JS",
     "question": "Strict mode: 'this' in a plain call f()",
     "right": "undefined",
-    "wrong": [
-      "globalThis",
-      "null"
-    ]
+    "wrong": ["globalThis", "null"]
   },
   {
     "topic": "JS",
     "question": "for...in loops over an object's",
     "right": "Enumerable string keys",
-    "wrong": [
-      "Values",
-      "Symbol keys only"
-    ]
+    "wrong": ["Values", "Symbol keys only"]
   },
   {
     "topic": "JS",
     "question": "[NaN].includes(NaN)",
     "right": "true",
-    "wrong": [
-      "false",
-      "TypeError"
-    ]
+    "wrong": ["false", "TypeError"]
   },
   {
     "topic": "JS",
     "question": "Number.MAX_SAFE_INTEGER equals",
     "right": "2^53 - 1",
-    "wrong": [
-      "2^32 - 1",
-      "2^64 - 1"
-    ]
+    "wrong": ["2^32 - 1", "2^64 - 1"]
   },
   {
     "topic": "JS",
     "question": "Result of 1 + 2n (Number plus BigInt)",
     "right": "TypeError",
-    "wrong": [
-      "3n",
-      "3"
-    ]
+    "wrong": ["3n", "3"]
   },
   {
     "topic": "JS",
     "question": "Private class field syntax",
     "right": "#count",
-    "wrong": [
-      "_count",
-      "private count"
-    ]
+    "wrong": ["_count", "private count"]
   },
   {
     "topic": "JS",
     "question": "x ??= 5 assigns when x is",
     "right": "null or undefined",
-    "wrong": [
-      "Any falsy value",
-      "Only undefined"
-    ]
+    "wrong": ["Any falsy value", "Only undefined"]
   },
   {
     "topic": "JS",
     "question": "Destructuring default is used when value is",
     "right": "undefined",
-    "wrong": [
-      "null or undefined",
-      "Any falsy value"
-    ]
+    "wrong": ["null or undefined", "Any falsy value"]
   },
   {
     "topic": "JS",
     "question": "Default depth of Array.prototype.flat()",
     "right": "1",
-    "wrong": [
-      "Infinity",
-      "0"
-    ]
+    "wrong": ["Infinity", "0"]
   },
   {
     "topic": "JS",
     "question": "[].reduce((a, b) => a + b)",
     "right": "TypeError",
-    "wrong": [
-      "0",
-      "undefined"
-    ]
+    "wrong": ["0", "undefined"]
   },
   {
     "topic": "JS",
     "question": "Math.max() with no arguments",
     "right": "-Infinity",
-    "wrong": [
-      "0",
-      "Infinity"
-    ]
+    "wrong": ["0", "Infinity"]
   },
   {
     "topic": "JS",
     "question": "[1].push(5) returns",
     "right": "2",
-    "wrong": [
-      "[1, 5]",
-      "5"
-    ]
+    "wrong": ["[1, 5]", "5"]
   },
   {
     "topic": "JS",
     "question": "Cancel a fetch request with",
     "right": "AbortController",
-    "wrong": [
-      "fetch.cancel()",
-      "Promise.cancel()"
-    ]
+    "wrong": ["fetch.cancel()", "Promise.cancel()"]
   },
   {
     "topic": "JS",
     "question": "new Set([1, 1, 2]).size",
     "right": "2",
-    "wrong": [
-      "3",
-      "1"
-    ]
+    "wrong": ["3", "1"]
   },
   {
     "topic": "JS",
     "question": "Code inside a class body runs in",
     "right": "Strict mode",
-    "wrong": [
-      "Sloppy mode",
-      "Strict mode if opted in"
-    ]
+    "wrong": ["Sloppy mode", "Strict mode if opted in"]
   },
   {
     "topic": "TS",
     "question": "Make all properties of T optional",
     "right": "Partial<T>",
-    "wrong": [
-      "Optional<T>",
-      "Required<T>"
-    ]
+    "wrong": ["Optional<T>", "Required<T>"]
   },
   {
     "topic": "TS",
     "question": "Keep only some keys of a type",
     "right": "Pick<T, K>",
-    "wrong": [
-      "Omit<T, K>",
-      "Extract<T, K>"
-    ]
+    "wrong": ["Omit<T, K>", "Extract<T, K>"]
   },
   {
     "topic": "TS",
     "question": "Object type: string keys, number values",
     "right": "Record<string, number>",
-    "wrong": [
-      "Map<string, number>",
-      "Object<string, number>"
-    ]
+    "wrong": ["Map<string, number>", "Object<string, number>"]
   },
   {
     "topic": "TS",
     "question": "Get the return type of function type F",
     "right": "ReturnType<F>",
-    "wrong": [
-      "ResultType<F>",
-      "Parameters<F>"
-    ]
+    "wrong": ["ResultType<F>", "Parameters<F>"]
   },
   {
     "topic": "TS",
     "question": "Remove null and undefined from T",
     "right": "NonNullable<T>",
-    "wrong": [
-      "Required<T>",
-      "Exclude<T, never>"
-    ]
+    "wrong": ["Required<T>", "Exclude<T, never>"]
   },
   {
     "topic": "TS",
     "question": "Unwrap the value type of a Promise",
     "right": "Awaited<T>",
-    "wrong": [
-      "Unwrap<T>",
-      "PromiseType<T>"
-    ]
+    "wrong": ["Unwrap<T>", "PromiseType<T>"]
   },
   {
     "topic": "TS",
     "question": "keyof { a: 1; b: 2 }",
     "right": "'a' | 'b'",
-    "wrong": [
-      "1 | 2",
-      "string"
-    ]
+    "wrong": ["1 | 2", "string"]
   },
   {
     "topic": "TS",
     "question": "Constrain a generic: <T ___ string>",
     "right": "extends",
-    "wrong": [
-      "implements",
-      "is"
-    ]
+    "wrong": ["implements", "is"]
   },
   {
     "topic": "TS",
     "question": "Return type of a user-defined type guard",
     "right": "x is string",
-    "wrong": [
-      "x as string",
-      "typeof x"
-    ]
+    "wrong": ["x as string", "typeof x"]
   },
   {
     "topic": "TS",
     "question": "Type of [1, 2] as const",
     "right": "readonly [1, 2]",
-    "wrong": [
-      "number[]",
-      "readonly number[]"
-    ]
+    "wrong": ["number[]", "readonly number[]"]
   },
   {
     "topic": "TS",
     "question": "What does 'satisfies' do?",
     "right": "Checks, keeps inferred type",
-    "wrong": [
-      "Casts the value",
-      "Narrows at runtime"
-    ]
+    "wrong": ["Casts the value", "Narrows at runtime"]
   },
   {
     "topic": "TS",
     "question": "Non-null assertion operator",
     "right": "x!",
-    "wrong": [
-      "x?",
-      "x!!"
-    ]
+    "wrong": ["x?", "x!!"]
   },
   {
     "topic": "TS",
     "question": "Only interfaces support",
     "right": "Declaration merging",
-    "wrong": [
-      "Union types",
-      "Generics"
-    ]
+    "wrong": ["Union types", "Generics"]
   },
   {
     "topic": "TS",
     "question": "Type-only import syntax",
     "right": "import type { T }",
-    "wrong": [
-      "import { type: T }",
-      "import interface T"
-    ]
+    "wrong": ["import { type: T }", "import interface T"]
   },
   {
     "topic": "TS",
     "question": "Union type left after all cases are handled",
     "right": "never",
-    "wrong": [
-      "unknown",
-      "void"
-    ]
+    "wrong": ["unknown", "void"]
   },
   {
     "topic": "TS",
     "question": "tsconfig option that turns on all strict checks",
     "right": "strict",
-    "wrong": [
-      "noImplicitAny",
-      "strictMode"
-    ]
+    "wrong": ["noImplicitAny", "strictMode"]
   },
   {
     "topic": "TS",
     "question": "Flag that makes arr[i] possibly undefined",
     "right": "noUncheckedIndexedAccess",
-    "wrong": [
-      "strictNullChecks",
-      "noImplicitAny"
-    ]
+    "wrong": ["strictNullChecks", "noImplicitAny"]
   },
   {
     "topic": "TS",
     "question": "Read-only array of numbers",
     "right": "readonly number[]",
-    "wrong": [
-      "const number[]",
-      "final number[]"
-    ]
+    "wrong": ["const number[]", "final number[]"]
   },
   {
     "topic": "TS",
     "question": "Tuple with optional second element",
     "right": "[string, number?]",
-    "wrong": [
-      "[string, ?number]",
-      "[string, number | ?]"
-    ]
+    "wrong": ["[string, ?number]", "[string, number | ?]"]
   },
   {
     "topic": "TS",
     "question": "Keyword to capture a type in a conditional",
     "right": "infer",
-    "wrong": [
-      "typeof",
-      "extract"
-    ]
+    "wrong": ["typeof", "extract"]
   },
   {
     "topic": "TS",
     "question": "Index signature for string keys",
     "right": "[key: string]: T",
-    "wrong": [
-      "<key: string>: T",
-      "{key: string}: T"
-    ]
+    "wrong": ["<key: string>: T", "{key: string}: T"]
   },
   {
     "topic": "TS",
     "question": "enum Dir { Up, Down }: value of Dir.Down",
     "right": "1",
-    "wrong": [
-      "'Down'",
-      "2"
-    ]
+    "wrong": ["'Down'", "2"]
   },
   {
     "topic": "TS",
     "question": "Do TS types exist at runtime?",
     "right": "No, they are erased",
-    "wrong": [
-      "Yes, as metadata",
-      "Only in strict mode"
-    ]
+    "wrong": ["Yes, as metadata", "Only in strict mode"]
   },
   {
     "topic": "TS",
     "question": "Mapped type modifier that drops readonly",
     "right": "-readonly",
-    "wrong": [
-      "!readonly",
-      "~readonly"
-    ]
+    "wrong": ["!readonly", "~readonly"]
   },
   {
     "topic": "TS",
     "question": "Exclude<'a' | 'b', 'a'>",
     "right": "'b'",
-    "wrong": [
-      "'a'",
-      "never"
-    ]
+    "wrong": ["'a'", "never"]
   },
   {
     "topic": "TS",
     "question": "Type of x in: const x = 'hi'",
     "right": "\"hi\"",
-    "wrong": [
-      "string",
-      "any"
-    ]
+    "wrong": ["string", "any"]
   },
   {
     "topic": "TS",
     "question": "new on an abstract class gives",
     "right": "A compile error",
-    "wrong": [
-      "An empty object",
-      "A subclass instance"
-    ]
+    "wrong": ["An empty object", "A subclass instance"]
   },
   {
     "topic": "TS",
     "question": "Member visible to subclasses, not outside",
     "right": "protected",
-    "wrong": [
-      "private",
-      "internal"
-    ]
+    "wrong": ["private", "internal"]
   },
   {
     "topic": "TS",
     "question": "Overloaded function: implementations count",
     "right": "Exactly one",
-    "wrong": [
-      "One per signature",
-      "None"
-    ]
+    "wrong": ["One per signature", "None"]
   },
   {
     "topic": "TS",
     "question": "Type assertion syntax allowed in .tsx files",
     "right": "value as Type",
-    "wrong": [
-      "<Type>value",
-      "value is Type"
-    ]
+    "wrong": ["<Type>value", "value is Type"]
   },
   {
     "topic": "React",
     "question": "Hook to read a context value?",
     "right": "useContext",
-    "wrong": [
-      "useReducer",
-      "useMemo"
-    ]
+    "wrong": ["useReducer", "useMemo"]
   },
   {
     "topic": "React",
     "question": "Hook to cache an expensive calculation?",
     "right": "useMemo",
-    "wrong": [
-      "useCallback",
-      "useRef"
-    ]
+    "wrong": ["useCallback", "useRef"]
   },
   {
     "topic": "React",
     "question": "Effect hook that fires before browser repaint?",
     "right": "useLayoutEffect",
-    "wrong": [
-      "useEffect",
-      "useTransition"
-    ]
+    "wrong": ["useEffect", "useTransition"]
   },
   {
     "topic": "React",
     "question": "Hook to subscribe to an external store?",
     "right": "useSyncExternalStore",
-    "wrong": [
-      "useContext",
-      "useReducer"
-    ]
+    "wrong": ["useContext", "useReducer"]
   },
   {
     "topic": "React",
     "question": "Hook to show optimistic UI while action runs?",
     "right": "useOptimistic",
-    "wrong": [
-      "useDeferredValue",
-      "useFormStatus"
-    ]
+    "wrong": ["useDeferredValue", "useFormStatus"]
   },
   {
     "topic": "React",
     "question": "React 19 hook that tracks an Action's result?",
     "right": "useActionState",
-    "wrong": [
-      "useOptimistic",
-      "useFormStatus"
-    ]
+    "wrong": ["useOptimistic", "useFormStatus"]
   },
   {
     "topic": "React",
     "question": "react-dom hook to read parent <form> status?",
     "right": "useFormStatus",
-    "wrong": [
-      "useActionState",
-      "useTransition"
-    ]
+    "wrong": ["useActionState", "useTransition"]
   },
   {
     "topic": "React",
     "question": "React 19 API that reads a promise in render?",
     "right": "use",
-    "wrong": [
-      "useAsync",
-      "useEffect"
-    ]
+    "wrong": ["useAsync", "useEffect"]
   },
   {
     "topic": "React",
     "question": "Component that shows a fallback while loading?",
     "right": "<Suspense>",
-    "wrong": [
-      "<Fragment>",
-      "<StrictMode>"
-    ]
+    "wrong": ["<Fragment>", "<StrictMode>"]
   },
   {
     "topic": "React",
     "question": "Defer loading a component's code until render?",
     "right": "lazy",
-    "wrong": [
-      "memo",
-      "startTransition"
-    ]
+    "wrong": ["memo", "startTransition"]
   },
   {
     "topic": "React",
     "question": "Skip re-renders when props are the same?",
     "right": "memo",
-    "wrong": [
-      "lazy",
-      "useCallback"
-    ]
+    "wrong": ["lazy", "useCallback"]
   },
   {
     "topic": "React",
     "question": "React 19: how does a function component get ref?",
     "right": "As a regular prop",
-    "wrong": [
-      "Only via forwardRef",
-      "Through useContext"
-    ]
+    "wrong": ["Only via forwardRef", "Through useContext"]
   },
   {
     "topic": "React",
     "question": "React 19: a ref callback can return a",
     "right": "Cleanup function",
-    "wrong": [
-      "Promise",
-      "New ref object"
-    ]
+    "wrong": ["Promise", "New ref object"]
   },
   {
     "topic": "React",
     "question": "Where does React 19 put a rendered <title>?",
     "right": "In the document <head>",
-    "wrong": [
-      "Where it is rendered",
-      "Nowhere, it is ignored"
-    ]
+    "wrong": ["Where it is rendered", "Nowhere, it is ignored"]
   },
   {
     "topic": "React",
     "question": "Render children into a different DOM node?",
     "right": "createPortal",
-    "wrong": [
-      "createRoot",
-      "cloneElement"
-    ]
+    "wrong": ["createRoot", "cloneElement"]
   },
   {
     "topic": "React",
     "question": "Attach React to server-rendered HTML?",
     "right": "hydrateRoot",
-    "wrong": [
-      "createRoot",
-      "renderToString"
-    ]
+    "wrong": ["createRoot", "renderToString"]
   },
   {
     "topic": "React",
     "question": "JSX prop for an element's CSS class?",
     "right": "className",
-    "wrong": [
-      "class",
-      "cssClass"
-    ]
+    "wrong": ["class", "cssClass"]
   },
   {
     "topic": "React",
     "question": "Prop to insert raw HTML into an element?",
     "right": "dangerouslySetInnerHTML",
-    "wrong": [
-      "innerHTML",
-      "rawHtml"
-    ]
+    "wrong": ["innerHTML", "rawHtml"]
   },
   {
     "topic": "React",
     "question": "In JSX, the style prop takes",
     "right": "An object",
-    "wrong": [
-      "A CSS string",
-      "An array of classes"
-    ]
+    "wrong": ["A CSS string", "An array of classes"]
   },
   {
     "topic": "React",
     "question": "setState with an Object.is-equal value?",
     "right": "Re-render is skipped",
-    "wrong": [
-      "Always re-renders",
-      "Throws an error"
-    ]
+    "wrong": ["Always re-renders", "Throws an error"]
   },
   {
     "topic": "React",
     "question": "Reading state right after calling set gives",
     "right": "The old value",
-    "wrong": [
-      "The new value",
-      "undefined"
-    ]
+    "wrong": ["The new value", "undefined"]
   },
   {
     "topic": "React",
     "question": "Many set calls in one event handler cause",
     "right": "One batched re-render",
-    "wrong": [
-      "One render per call",
-      "No re-render"
-    ]
+    "wrong": ["One render per call", "No re-render"]
   },
   {
     "topic": "React",
     "question": "Give a component a new key to",
     "right": "Reset its state",
-    "wrong": [
-      "Keep its state",
-      "Skip its render"
-    ]
+    "wrong": ["Keep its state", "Skip its render"]
   },
   {
     "topic": "React",
     "question": "An Effect with [] deps runs",
     "right": "Only after mount",
-    "wrong": [
-      "After every render",
-      "Before mount"
-    ]
+    "wrong": ["After every render", "Before mount"]
   },
   {
     "topic": "React",
     "question": "Why Strict Mode runs Effects twice in dev?",
     "right": "To find missing cleanup",
-    "wrong": [
-      "To speed up renders",
-      "To prefetch data"
-    ]
+    "wrong": ["To speed up renders", "To prefetch data"]
   },
   {
     "topic": "React",
     "question": "Do Effects run during server rendering?",
     "right": "No, client only",
-    "wrong": [
-      "Yes, once",
-      "Yes, before hydration"
-    ]
+    "wrong": ["Yes, once", "Yes, before hydration"]
   },
   {
     "topic": "React",
     "question": "Custom Hook names must start with",
     "right": "use",
-    "wrong": [
-      "hook",
-      "with"
-    ]
+    "wrong": ["hook", "with"]
   },
   {
     "topic": "React",
     "question": "Two components using one custom Hook share",
     "right": "Logic, not state",
-    "wrong": [
-      "The same state",
-      "One Effect instance"
-    ]
+    "wrong": ["The same state", "One Effect instance"]
   },
   {
     "topic": "React",
     "question": "{count && <Badge />} with count 0 renders",
     "right": "0",
-    "wrong": [
-      "Nothing",
-      "false"
-    ]
+    "wrong": ["Nothing", "false"]
   },
   {
     "topic": "React",
     "question": "Correct way to pass a click handler?",
     "right": "onClick={handleClick}",
-    "wrong": [
-      "onClick={handleClick()}",
-      "onClick=\"handleClick\""
-    ]
+    "wrong": ["onClick={handleClick()}", "onClick=\"handleClick\""]
   },
   {
     "topic": "React",
     "question": "Stop an event reaching parent handlers?",
     "right": "e.stopPropagation()",
-    "wrong": [
-      "e.preventDefault()",
-      "e.cancel()"
-    ]
+    "wrong": ["e.preventDefault()", "e.cancel()"]
   },
   {
     "topic": "React",
     "question": "Stop a form submit from reloading the page?",
     "right": "e.preventDefault()",
-    "wrong": [
-      "e.stopPropagation()",
-      "e.persist()"
-    ]
+    "wrong": ["e.stopPropagation()", "e.persist()"]
   },
   {
     "topic": "React",
     "question": "Directive to make a module a Client Component?",
     "right": "'use client'",
-    "wrong": [
-      "'use server'",
-      "'use strict'"
-    ]
+    "wrong": ["'use server'", "'use strict'"]
   },
   {
     "topic": "React",
     "question": "What does 'use server' mark?",
     "right": "Server Functions",
-    "wrong": [
-      "Server Components",
-      "Client Components"
-    ]
+    "wrong": ["Server Components", "Client Components"]
   },
   {
     "topic": "React",
     "question": "Can Server Components use useState?",
     "right": "No",
-    "wrong": [
-      "Yes",
-      "Only with 'use server'"
-    ]
+    "wrong": ["Yes", "Only with 'use server'"]
   },
   {
     "topic": "Git",
     "question": "Create a branch and switch to it?",
     "right": "git switch -c",
-    "wrong": [
-      "git branch -m",
-      "git init -b"
-    ]
+    "wrong": ["git branch -m", "git init -b"]
   },
   {
     "topic": "Git",
     "question": "Discard unstaged edits to a file?",
     "right": "git restore <file>",
-    "wrong": [
-      "git rm --cached <file>",
-      "git stash list"
-    ]
+    "wrong": ["git rm --cached <file>", "git stash list"]
   },
   {
     "topic": "Git",
     "question": "Unstage a file but keep your edits?",
     "right": "git restore --staged",
-    "wrong": [
-      "git rm <file>",
-      "git clean -f"
-    ]
+    "wrong": ["git rm <file>", "git clean -f"]
   },
   {
     "topic": "Git",
     "question": "Shelve uncommitted work for later?",
     "right": "git stash",
-    "wrong": [
-      "git clean -fd",
-      "git reset --hard"
-    ]
+    "wrong": ["git clean -fd", "git reset --hard"]
   },
   {
     "topic": "Git",
     "question": "Apply the latest stash and remove it?",
     "right": "git stash pop",
-    "wrong": [
-      "git stash apply",
-      "git stash show"
-    ]
+    "wrong": ["git stash apply", "git stash show"]
   },
   {
     "topic": "Git",
     "question": "Copy one commit onto your branch?",
     "right": "git cherry-pick",
-    "wrong": [
-      "git merge --squash",
-      "git revert"
-    ]
+    "wrong": ["git merge --squash", "git revert"]
   },
   {
     "topic": "Git",
     "question": "Undo a pushed commit with a new commit?",
     "right": "git revert",
-    "wrong": [
-      "git reset --hard",
-      "git restore"
-    ]
+    "wrong": ["git reset --hard", "git restore"]
   },
   {
     "topic": "Git",
     "question": "Binary search history for a bad commit?",
     "right": "git bisect",
-    "wrong": [
-      "git blame",
-      "git reflog"
-    ]
+    "wrong": ["git blame", "git reflog"]
   },
   {
     "topic": "Git",
     "question": "Show who last changed each line?",
     "right": "git blame",
-    "wrong": [
-      "git log",
-      "git show"
-    ]
+    "wrong": ["git log", "git show"]
   },
   {
     "topic": "Git",
     "question": "Find a commit lost after git reset?",
     "right": "git reflog",
-    "wrong": [
-      "git stash list",
-      "git status"
-    ]
+    "wrong": ["git stash list", "git status"]
   },
   {
     "topic": "Git",
     "question": "Delete branch feat on origin?",
     "right": "git push origin -d feat",
-    "wrong": [
-      "git branch -d feat",
-      "git remote rm feat"
-    ]
+    "wrong": ["git branch -d feat", "git remote rm feat"]
   },
   {
     "topic": "Git",
     "question": "Push a new branch and set its upstream?",
     "right": "git push -u",
-    "wrong": [
-      "git push --tags",
-      "git push --force"
-    ]
+    "wrong": ["git push --tags", "git push --force"]
   },
   {
     "topic": "Git",
     "question": "Safer alternative to git push --force?",
     "right": "--force-with-lease",
-    "wrong": [
-      "--no-verify",
-      "--set-upstream"
-    ]
+    "wrong": ["--no-verify", "--set-upstream"]
   },
   {
     "topic": "Git",
     "question": "Delete untracked files and folders?",
     "right": "git clean -fd",
-    "wrong": [
-      "git reset --hard",
-      "git rm -r ."
-    ]
+    "wrong": ["git reset --hard", "git rm -r ."]
   },
   {
     "topic": "Git",
     "question": "Stop tracking a file but keep it on disk?",
     "right": "git rm --cached",
-    "wrong": [
-      "git rm -f",
-      "git clean -f"
-    ]
+    "wrong": ["git rm -f", "git clean -f"]
   },
   {
     "topic": "Git",
     "question": "Always create a merge commit when merging?",
     "right": "git merge --no-ff",
-    "wrong": [
-      "git merge --ff-only",
-      "git merge --squash"
-    ]
+    "wrong": ["git merge --ff-only", "git merge --squash"]
   },
   {
     "topic": "Git",
     "question": "Show changes staged for the next commit?",
     "right": "git diff --staged",
-    "wrong": [
-      "git diff HEAD~1",
-      "git status -s"
-    ]
+    "wrong": ["git diff HEAD~1", "git status -s"]
   },
   {
     "topic": "Git",
     "question": "Create an annotated tag?",
     "right": "git tag -a",
-    "wrong": [
-      "git tag -d",
-      "git tag -l"
-    ]
+    "wrong": ["git tag -d", "git tag -l"]
   },
   {
     "topic": "Git",
     "question": "Check out two branches in separate folders?",
     "right": "git worktree add",
-    "wrong": [
-      "git switch -c",
-      "git submodule add"
-    ]
+    "wrong": ["git switch -c", "git submodule add"]
   },
   {
     "topic": "Git",
     "question": "Local-only ignore file, never committed?",
     "right": ".git/info/exclude",
-    "wrong": [
-      ".gitattributes",
-      ".gitkeep"
-    ]
+    "wrong": [".gitattributes", ".gitkeep"]
   },
   {
     "topic": "Git",
     "question": "Adding a tracked file to .gitignore",
     "right": "Does not untrack it",
-    "wrong": [
-      "Deletes the file",
-      "Untracks it"
-    ]
+    "wrong": ["Deletes the file", "Untracks it"]
   },
   {
     "topic": "Git",
     "question": "HEAD~2 refers to",
     "right": "Grandparent of HEAD",
-    "wrong": [
-      "Second parent of HEAD",
-      "Two commits ahead"
-    ]
+    "wrong": ["Second parent of HEAD", "Two commits ahead"]
   },
   {
     "topic": "Git",
     "question": "Detached HEAD means HEAD points to",
     "right": "A commit, not a branch",
-    "wrong": [
-      "A deleted branch",
-      "The stash"
-    ]
+    "wrong": ["A deleted branch", "The stash"]
   },
   {
     "topic": "Git",
     "question": "Replay your commits on top of main?",
     "right": "git rebase main",
-    "wrong": [
-      "git merge main",
-      "git reset main"
-    ]
+    "wrong": ["git merge main", "git reset main"]
   },
   {
     "topic": "Git",
     "question": "Rebase conflict fixed and staged. Next?",
     "right": "git rebase --continue",
-    "wrong": [
-      "git rebase --skip",
-      "git rebase --abort"
-    ]
+    "wrong": ["git rebase --skip", "git rebase --abort"]
   },
   {
     "topic": "Git",
     "question": "Find commits that add or remove a string?",
     "right": "git log -S",
-    "wrong": [
-      "git grep",
-      "git blame"
-    ]
+    "wrong": ["git grep", "git blame"]
   },
   {
     "topic": "Git",
     "question": "Commit tracked changes without git add?",
     "right": "git commit -a",
-    "wrong": [
-      "git commit -m",
-      "git add -p"
-    ]
+    "wrong": ["git commit -m", "git add -p"]
   },
   {
     "topic": "Git",
     "question": "Stage only some hunks of a file?",
     "right": "git add -p",
-    "wrong": [
-      "git add -A",
-      "git add -u"
-    ]
+    "wrong": ["git add -A", "git add -u"]
   },
   {
     "topic": "Git",
     "question": "Squash your last few commits?",
     "right": "git rebase -i",
-    "wrong": [
-      "git merge --ff",
-      "git cherry-pick"
-    ]
+    "wrong": ["git merge --ff", "git cherry-pick"]
   },
   {
     "topic": "Git",
     "question": "Default remote name after git clone?",
     "right": "origin",
-    "wrong": [
-      "upstream",
-      "main"
-    ]
+    "wrong": ["upstream", "main"]
   },
   {
     "topic": "HTTP",
     "question": "Status: resource was created",
     "right": "201 Created",
-    "wrong": [
-      "200 OK",
-      "202 Accepted"
-    ]
+    "wrong": ["200 OK", "202 Accepted"]
   },
   {
     "topic": "HTTP",
     "question": "Status: success, nothing in the body",
     "right": "204 No Content",
-    "wrong": [
-      "202 Accepted",
-      "201 Created"
-    ]
+    "wrong": ["202 Accepted", "201 Created"]
   },
   {
     "topic": "HTTP",
     "question": "Status: your cached copy is still valid",
     "right": "304 Not Modified",
-    "wrong": [
-      "302 Found",
-      "204 No Content"
-    ]
+    "wrong": ["302 Found", "204 No Content"]
   },
   {
     "topic": "HTTP",
     "question": "Permanent redirect that must keep the method",
     "right": "308 Permanent Redirect",
-    "wrong": [
-      "301 Moved Permanently",
-      "307 Temporary Redirect"
-    ]
+    "wrong": ["301 Moved Permanently", "307 Temporary Redirect"]
   },
   {
     "topic": "HTTP",
     "question": "Status: upstream timed out at the proxy",
     "right": "504 Gateway Timeout",
-    "wrong": [
-      "408 Request Timeout",
-      "503 Service Unavailable"
-    ]
+    "wrong": ["408 Request Timeout", "503 Service Unavailable"]
   },
   {
     "topic": "HTTP",
     "question": "Status: request body is too large",
     "right": "413 Content Too Large",
-    "wrong": [
-      "414 URI Too Long",
-      "400 Bad Request"
-    ]
+    "wrong": ["414 URI Too Long", "400 Bad Request"]
   },
   {
     "topic": "HTTP",
     "question": "Status: clash with the resource's current state",
     "right": "409 Conflict",
-    "wrong": [
-      "410 Gone",
-      "400 Bad Request"
-    ]
+    "wrong": ["410 Gone", "400 Bad Request"]
   },
   {
     "topic": "HTTP",
     "question": "Status: method not supported on this URL",
     "right": "405 Method Not Allowed",
-    "wrong": [
-      "400 Bad Request",
-      "406 Not Acceptable"
-    ]
+    "wrong": ["400 Bad Request", "406 Not Acceptable"]
   },
   {
     "topic": "HTTP",
     "question": "Status: can't produce a format you Accept",
     "right": "406 Not Acceptable",
-    "wrong": [
-      "415 Unsupported Media Type",
-      "400 Bad Request"
-    ]
+    "wrong": ["415 Unsupported Media Type", "400 Bad Request"]
   },
   {
     "topic": "HTTP",
     "question": "Status for a served byte range",
     "right": "206 Partial Content",
-    "wrong": [
-      "200 OK",
-      "416 Range Not Satisfiable"
-    ]
+    "wrong": ["200 OK", "416 Range Not Satisfiable"]
   },
   {
     "topic": "HTTP",
     "question": "Revalidate a cached response by its ETag",
     "right": "If-None-Match",
-    "wrong": [
-      "If-Match",
-      "If-Unmodified-Since"
-    ]
+    "wrong": ["If-Match", "If-Unmodified-Since"]
   },
   {
     "topic": "HTTP",
     "question": "Cache-Control: store, but revalidate each use",
     "right": "no-cache",
-    "wrong": [
-      "no-store",
-      "must-revalidate"
-    ]
+    "wrong": ["no-store", "must-revalidate"]
   },
   {
     "topic": "HTTP",
     "question": "Cache-Control: never store the response",
     "right": "no-store",
-    "wrong": [
-      "no-cache",
-      "private"
-    ]
+    "wrong": ["no-cache", "private"]
   },
   {
     "topic": "HTTP",
     "question": "Cache-Control max-age for shared caches only",
     "right": "s-maxage",
-    "wrong": [
-      "max-stale",
-      "proxy-revalidate"
-    ]
+    "wrong": ["max-stale", "proxy-revalidate"]
   },
   {
     "topic": "HTTP",
     "question": "Header listing request headers a cache keys on",
     "right": "Vary",
-    "wrong": [
-      "ETag",
-      "Cache-Control"
-    ]
+    "wrong": ["ETag", "Cache-Control"]
   },
   {
     "topic": "HTTP",
     "question": "HTTP/1.1 header every request must send",
     "right": "Host",
-    "wrong": [
-      "User-Agent",
-      "Accept"
-    ]
+    "wrong": ["User-Agent", "Accept"]
   },
   {
     "topic": "HTTP",
     "question": "HTTP/2 header compression format",
     "right": "HPACK",
-    "wrong": [
-      "QPACK",
-      "Brotli"
-    ]
+    "wrong": ["QPACK", "Brotli"]
   },
   {
     "topic": "HTTP",
     "question": "HTTP/3 runs on top of",
     "right": "QUIC",
-    "wrong": [
-      "TCP",
-      "SCTP"
-    ]
+    "wrong": ["TCP", "SCTP"]
   },
   {
     "topic": "HTTP",
     "question": "Method for a partial update of a resource",
     "right": "PATCH",
-    "wrong": [
-      "PUT",
-      "POST"
-    ]
+    "wrong": ["PUT", "POST"]
   },
   {
     "topic": "HTTP",
     "question": "Method a CORS preflight request uses",
     "right": "OPTIONS",
-    "wrong": [
-      "HEAD",
-      "GET"
-    ]
+    "wrong": ["HEAD", "GET"]
   },
   {
     "topic": "HTTP",
     "question": "CORS with cookies: Allow-Origin can't be",
     "right": "*",
-    "wrong": [
-      "The exact request origin",
-      "An https:// origin"
-    ]
+    "wrong": ["The exact request origin", "An https:// origin"]
   },
   {
     "topic": "HTTP",
     "question": "Header: always use HTTPS for this host",
     "right": "Strict-Transport-Security",
-    "wrong": [
-      "X-Forwarded-Proto",
-      "Referrer-Policy"
-    ]
+    "wrong": ["X-Forwarded-Proto", "Referrer-Policy"]
   },
   {
     "topic": "HTTP",
     "question": "Cookie attribute that hides it from JS",
     "right": "HttpOnly",
-    "wrong": [
-      "Secure",
-      "SameSite=Strict"
-    ]
+    "wrong": ["Secure", "SameSite=Strict"]
   },
   {
     "topic": "HTTP",
     "question": "Cookie attribute: send over HTTPS only",
     "right": "Secure",
-    "wrong": [
-      "HttpOnly",
-      "SameSite=Lax"
-    ]
+    "wrong": ["HttpOnly", "SameSite=Lax"]
   },
   {
     "topic": "HTTP",
     "question": "SameSite value: never send cross-site",
     "right": "Strict",
-    "wrong": [
-      "Lax",
-      "None"
-    ]
+    "wrong": ["Lax", "None"]
   },
   {
     "topic": "HTTP",
     "question": "Header that disables MIME sniffing",
     "right": "X-Content-Type-Options",
-    "wrong": [
-      "Content-Type",
-      "X-Frame-Options"
-    ]
+    "wrong": ["Content-Type", "X-Frame-Options"]
   },
   {
     "topic": "HTTP",
     "question": "CSP directive: who may embed your page",
     "right": "frame-ancestors",
-    "wrong": [
-      "frame-src",
-      "child-src"
-    ]
+    "wrong": ["frame-src", "child-src"]
   },
   {
     "topic": "HTTP",
     "question": "Storage cleared when the tab is closed",
     "right": "sessionStorage",
-    "wrong": [
-      "localStorage",
-      "IndexedDB"
-    ]
+    "wrong": ["localStorage", "IndexedDB"]
   },
   {
     "topic": "HTTP",
     "question": "Script attribute: run after parse, in order",
     "right": "defer",
-    "wrong": [
-      "async",
-      "nomodule"
-    ]
+    "wrong": ["async", "nomodule"]
   },
   {
     "topic": "HTTP",
     "question": "Browser API to run JS off the main thread",
     "right": "Web Workers",
-    "wrong": [
-      "requestIdleCallback",
-      "queueMicrotask"
-    ]
+    "wrong": ["requestIdleCallback", "queueMicrotask"]
   },
   {
     "topic": "SQL",
     "question": "Join that never drops left-side rows",
     "right": "LEFT JOIN",
-    "wrong": [
-      "INNER JOIN",
-      "CROSS JOIN"
-    ]
+    "wrong": ["INNER JOIN", "CROSS JOIN"]
   },
   {
     "topic": "SQL",
     "question": "NULL = NULL evaluates to",
     "right": "NULL",
-    "wrong": [
-      "TRUE",
-      "FALSE"
-    ]
+    "wrong": ["TRUE", "FALSE"]
   },
   {
     "topic": "SQL",
     "question": "Correct way to test for NULL",
     "right": "IS NULL",
-    "wrong": [
-      "= NULL",
-      "== NULL"
-    ]
+    "wrong": ["= NULL", "== NULL"]
   },
   {
     "topic": "SQL",
     "question": "COUNT(col) does not count",
     "right": "NULL values",
-    "wrong": [
-      "Duplicate values",
-      "Zero values"
-    ]
+    "wrong": ["Duplicate values", "Zero values"]
   },
   {
     "topic": "SQL",
     "question": "Combine two queries, keep duplicates",
     "right": "UNION ALL",
-    "wrong": [
-      "UNION",
-      "UNION DISTINCT"
-    ]
+    "wrong": ["UNION", "UNION DISTINCT"]
   },
   {
     "topic": "SQL",
     "question": "Postgres: rows in query 1, not in query 2",
     "right": "EXCEPT",
-    "wrong": [
-      "MINUS",
-      "INTERSECT"
-    ]
+    "wrong": ["MINUS", "INTERSECT"]
   },
   {
     "topic": "SQL",
     "question": "Postgres: get rows back from an INSERT",
     "right": "RETURNING",
-    "wrong": [
-      "OUTPUT",
-      "SELECT INSERTED"
-    ]
+    "wrong": ["OUTPUT", "SELECT INSERTED"]
   },
   {
     "topic": "SQL",
     "question": "Postgres upsert syntax",
     "right": "ON CONFLICT DO UPDATE",
-    "wrong": [
-      "ON DUPLICATE KEY UPDATE",
-      "UPSERT INTO"
-    ]
+    "wrong": ["ON DUPLICATE KEY UPDATE", "UPSERT INTO"]
   },
   {
     "topic": "SQL",
     "question": "Postgres: run query, show actual plan times",
     "right": "EXPLAIN ANALYZE",
-    "wrong": [
-      "EXPLAIN",
-      "ANALYZE"
-    ]
+    "wrong": ["EXPLAIN", "ANALYZE"]
   },
   {
     "topic": "SQL",
     "question": "Postgres JSON type stored in binary form",
     "right": "jsonb",
-    "wrong": [
-      "json",
-      "bytea"
-    ]
+    "wrong": ["json", "bytea"]
   },
   {
     "topic": "SQL",
     "question": "Postgres index type for jsonb @> queries",
     "right": "GIN",
-    "wrong": [
-      "B-tree",
-      "Hash"
-    ]
+    "wrong": ["B-tree", "Hash"]
   },
   {
     "topic": "SQL",
     "question": "Default index type in PostgreSQL",
     "right": "B-tree",
-    "wrong": [
-      "Hash",
-      "GiST"
-    ]
+    "wrong": ["Hash", "GiST"]
   },
   {
     "topic": "SQL",
     "question": "Postgres: build index without blocking writes",
     "right": "CREATE INDEX CONCURRENTLY",
-    "wrong": [
-      "CREATE INDEX ONLINE",
-      "CREATE INDEX NOWAIT"
-    ]
+    "wrong": ["CREATE INDEX ONLINE", "CREATE INDEX NOWAIT"]
   },
   {
     "topic": "SQL",
     "question": "PostgreSQL default isolation level",
     "right": "Read Committed",
-    "wrong": [
-      "Repeatable Read",
-      "Serializable"
-    ]
+    "wrong": ["Repeatable Read", "Serializable"]
   },
   {
     "topic": "SQL",
     "question": "Lock read rows before updating them",
     "right": "SELECT ... FOR UPDATE",
-    "wrong": [
-      "SELECT ... WITH LOCK",
-      "LOCK ROWS SELECT ..."
-    ]
+    "wrong": ["SELECT ... WITH LOCK", "LOCK ROWS SELECT ..."]
   },
   {
     "topic": "SQL",
     "question": "Queue workers: skip rows others locked",
     "right": "SKIP LOCKED",
-    "wrong": [
-      "NOWAIT",
-      "IGNORE LOCKED"
-    ]
+    "wrong": ["NOWAIT", "IGNORE LOCKED"]
   },
   {
     "topic": "SQL",
     "question": "Rank with no gaps after ties",
     "right": "DENSE_RANK()",
-    "wrong": [
-      "RANK()",
-      "ROW_NUMBER()"
-    ]
+    "wrong": ["RANK()", "ROW_NUMBER()"]
   },
   {
     "topic": "SQL",
     "question": "A window function call always needs",
     "right": "An OVER clause",
-    "wrong": [
-      "A GROUP BY clause",
-      "A subquery"
-    ]
+    "wrong": ["A GROUP BY clause", "A subquery"]
   },
   {
     "topic": "SQL",
     "question": "First non-NULL value among arguments",
     "right": "COALESCE",
-    "wrong": [
-      "NULLIF",
-      "GREATEST"
-    ]
+    "wrong": ["NULLIF", "GREATEST"]
   },
   {
     "topic": "SQL",
     "question": "SQL-standard auto-increment column",
     "right": "GENERATED ALWAYS AS IDENTITY",
-    "wrong": [
-      "AUTO_INCREMENT",
-      "IDENTITY(1,1)"
-    ]
+    "wrong": ["AUTO_INCREMENT", "IDENTITY(1,1)"]
   },
   {
     "topic": "SQL",
     "question": "Postgres: reclaim space from dead rows",
     "right": "VACUUM",
-    "wrong": [
-      "ANALYZE",
-      "CHECKPOINT"
-    ]
+    "wrong": ["ANALYZE", "CHECKPOINT"]
   },
   {
     "topic": "SQL",
     "question": "Index on only the rows matching a WHERE",
     "right": "Partial index",
-    "wrong": [
-      "Covering index",
-      "Expression index"
-    ]
+    "wrong": ["Covering index", "Expression index"]
   },
   {
     "topic": "SQL",
     "question": "Postgres: add non-key columns to an index",
     "right": "INCLUDE (...)",
-    "wrong": [
-      "WITH (...)",
-      "COVERING (...)"
-    ]
+    "wrong": ["WITH (...)", "COVERING (...)"]
   },
   {
     "topic": "SQL",
     "question": "Postgres: keep first row per group key",
     "right": "SELECT DISTINCT ON (...)",
-    "wrong": [
-      "SELECT FIRST ON (...)",
-      "SELECT UNIQUE (...)"
-    ]
+    "wrong": ["SELECT FIRST ON (...)", "SELECT UNIQUE (...)"]
   },
   {
     "topic": "SQL",
     "question": "Postgres: case-insensitive LIKE",
     "right": "ILIKE",
-    "wrong": [
-      "SIMILAR TO",
-      "LIKE BINARY"
-    ]
+    "wrong": ["SIMILAR TO", "LIKE BINARY"]
   },
   {
     "topic": "Ops",
     "question": "Docker: list running containers",
     "right": "docker ps",
-    "wrong": [
-      "docker ls",
-      "docker images"
-    ]
+    "wrong": ["docker ls", "docker images"]
   },
   {
     "topic": "Ops",
     "question": "docker run args replace which instruction?",
     "right": "CMD",
-    "wrong": [
-      "ENTRYPOINT",
-      "RUN"
-    ]
+    "wrong": ["ENTRYPOINT", "RUN"]
   },
   {
     "topic": "Ops",
     "question": "Docker: exclude files from build context",
     "right": ".dockerignore",
-    "wrong": [
-      ".gitignore",
-      ".dockerexclude"
-    ]
+    "wrong": [".gitignore", ".dockerexclude"]
   },
   {
     "topic": "Ops",
     "question": "Dockerfile: copy from an earlier build stage",
     "right": "COPY --from=<stage>",
-    "wrong": [
-      "COPY --stage=<stage>",
-      "ADD --build=<stage>"
-    ]
+    "wrong": ["COPY --stage=<stage>", "ADD --build=<stage>"]
   },
   {
     "topic": "Ops",
     "question": "docker run -p 8080:80 maps",
     "right": "Host 8080 to container 80",
-    "wrong": [
-      "Container 8080 to host 80",
-      "Ports 80 to 8080 inside"
-    ]
+    "wrong": ["Container 8080 to host 80", "Ports 80 to 8080 inside"]
   },
   {
     "topic": "Ops",
     "question": "Open a shell in a running container",
     "right": "docker exec -it <c> sh",
-    "wrong": [
-      "docker attach <c> sh",
-      "docker run -it <c> sh"
-    ]
+    "wrong": ["docker attach <c> sh", "docker run -it <c> sh"]
   },
   {
     "topic": "Ops",
     "question": "Dockerfile: copy package.json first for",
     "right": "Better layer caching",
-    "wrong": [
-      "Smaller final image",
-      "Faster container start"
-    ]
+    "wrong": ["Smaller final image", "Faster container start"]
   },
   {
     "topic": "Ops",
     "question": "Bash: exit code of the last command",
     "right": "$?",
-    "wrong": [
-      "$!",
-      "$$"
-    ]
+    "wrong": ["$!", "$$"]
   },
   {
     "topic": "Ops",
     "question": "Bash: exit when a command fails",
     "right": "set -e",
-    "wrong": [
-      "set -x",
-      "set -u"
-    ]
+    "wrong": ["set -x", "set -u"]
   },
   {
     "topic": "Ops",
     "question": "Signal sent by kill with no options",
     "right": "SIGTERM",
-    "wrong": [
-      "SIGKILL",
-      "SIGINT"
-    ]
+    "wrong": ["SIGKILL", "SIGINT"]
   },
   {
     "topic": "Ops",
     "question": "Follow a log file as it grows",
     "right": "tail -f",
-    "wrong": [
-      "cat -f",
-      "head -f"
-    ]
+    "wrong": ["cat -f", "head -f"]
   },
   {
     "topic": "Ops",
     "question": "Disk space used by a directory",
     "right": "du -sh",
-    "wrong": [
-      "df -h",
-      "ls -lh"
-    ]
+    "wrong": ["df -h", "ls -lh"]
   },
   {
     "topic": "Ops",
     "question": "chmod 644: the owner can",
     "right": "Read and write",
-    "wrong": [
-      "Read only",
-      "Read, write, execute"
-    ]
+    "wrong": ["Read only", "Read, write, execute"]
   },
   {
     "topic": "Ops",
     "question": "Redirect stderr to where stdout goes",
     "right": "2>&1",
-    "wrong": [
-      "1>&2",
-      "2>/dev/null"
-    ]
+    "wrong": ["1>&2", "2>/dev/null"]
   },
   {
     "topic": "Ops",
     "question": "First field of a crontab time spec",
     "right": "Minute",
-    "wrong": [
-      "Hour",
-      "Second"
-    ]
+    "wrong": ["Hour", "Second"]
   },
   {
     "topic": "Ops",
     "question": "File listing keys allowed to SSH in",
     "right": "authorized_keys",
-    "wrong": [
-      "known_hosts",
-      "id_ed25519.pub"
-    ]
+    "wrong": ["known_hosts", "id_ed25519.pub"]
   },
   {
     "topic": "Ops",
     "question": "DNS record: name to IPv6 address",
     "right": "AAAA",
-    "wrong": [
-      "A",
-      "PTR"
-    ]
+    "wrong": ["A", "PTR"]
   },
   {
     "topic": "Ops",
     "question": "DNS record that routes email",
     "right": "MX",
-    "wrong": [
-      "TXT",
-      "SRV"
-    ]
+    "wrong": ["TXT", "SRV"]
   },
   {
     "topic": "Ops",
     "question": "TLS extension that sends the hostname",
     "right": "SNI",
-    "wrong": [
-      "ALPN",
-      "OCSP stapling"
-    ]
+    "wrong": ["ALPN", "OCSP stapling"]
   },
   {
     "topic": "Ops",
     "question": "TLS extension that picks h2 or http/1.1",
     "right": "ALPN",
-    "wrong": [
-      "SNI",
-      "HSTS"
-    ]
+    "wrong": ["SNI", "HSTS"]
   },
   {
     "topic": "Ops",
     "question": "TLS 1.3 full handshake takes",
     "right": "1 round trip",
-    "wrong": [
-      "2 round trips",
-      "3 round trips"
-    ]
+    "wrong": ["2 round trips", "3 round trips"]
   },
   {
     "topic": "Ops",
     "question": "GitHub Actions key: run job after another",
     "right": "needs",
-    "wrong": [
-      "depends_on",
-      "after"
-    ]
+    "wrong": ["depends_on", "after"]
   },
   {
     "topic": "Ops",
     "question": "GitHub Actions: workflow files live in",
     "right": ".github/workflows/",
-    "wrong": [
-      ".github/actions/",
-      ".gh/workflows/"
-    ]
+    "wrong": [".github/actions/", ".gh/workflows/"]
   },
   {
     "topic": "Ops",
     "question": "SemVer bump for a breaking change",
     "right": "Major",
-    "wrong": [
-      "Minor",
-      "Patch"
-    ]
+    "wrong": ["Minor", "Patch"]
   },
   {
     "topic": "Web3",
     "question": "Solidity 0.8: uint overflow by default",
     "right": "reverts",
-    "wrong": [
-      "wraps around",
-      "saturates at max"
-    ]
+    "wrong": ["wraps around", "saturates at max"]
   },
   {
     "topic": "Web3",
     "question": "Solidity 0.8: skip overflow checks with",
     "right": "unchecked { }",
-    "wrong": [
-      "unsafe { }",
-      "nocheck { }"
-    ]
+    "wrong": ["unsafe { }", "nocheck { }"]
   },
   {
     "topic": "Web3",
     "question": "Solidity: neither reads nor writes state",
     "right": "pure",
-    "wrong": [
-      "view",
-      "payable"
-    ]
+    "wrong": ["view", "payable"]
   },
   {
     "topic": "Web3",
     "question": "Solidity: function that can accept ETH",
     "right": "payable",
-    "wrong": [
-      "view",
-      "pure"
-    ]
+    "wrong": ["view", "pure"]
   },
   {
     "topic": "Web3",
     "question": "Solidity: msg.sender is the",
     "right": "direct caller",
-    "wrong": [
-      "contract owner",
-      "block proposer"
-    ]
+    "wrong": ["contract owner", "block proposer"]
   },
   {
     "topic": "Web3",
     "question": "Solidity: tx.origin is the",
     "right": "EOA that signed the tx",
-    "wrong": [
-      "the calling contract",
-      "contract owner"
-    ]
+    "wrong": ["the calling contract", "contract owner"]
   },
   {
     "topic": "Web3",
     "question": "Solidity: read-only area for call args",
     "right": "calldata",
-    "wrong": [
-      "memory",
-      "storage"
-    ]
+    "wrong": ["memory", "storage"]
   },
   {
     "topic": "Web3",
     "question": "Solidity: keyword to fire an event",
     "right": "emit",
-    "wrong": [
-      "log",
-      "dispatch"
-    ]
+    "wrong": ["log", "dispatch"]
   },
   {
     "topic": "Web3",
     "question": "Solidity: max indexed params, normal event",
     "right": "3",
-    "wrong": [
-      "4",
-      "8"
-    ]
+    "wrong": ["4", "8"]
   },
   {
     "topic": "Web3",
     "question": "Solidity: gas-cheap way to explain a revert",
     "right": "custom error",
-    "wrong": [
-      "long revert string",
-      "event before revert"
-    ]
+    "wrong": ["long revert string", "event before revert"]
   },
   {
     "topic": "Web3",
     "question": "Solidity: runs on ETH with empty calldata",
     "right": "receive()",
-    "wrong": [
-      "constructor()",
-      "selfdestruct()"
-    ]
+    "wrong": ["constructor()", "selfdestruct()"]
   },
   {
     "topic": "Web3",
     "question": "Solidity: hidden from derived contracts",
     "right": "private",
-    "wrong": [
-      "internal",
-      "public"
-    ]
+    "wrong": ["internal", "public"]
   },
   {
     "topic": "Web3",
     "question": "Solidity: set in constructor, then fixed",
     "right": "immutable",
-    "wrong": [
-      "constant",
-      "transient"
-    ]
+    "wrong": ["constant", "transient"]
   },
   {
     "topic": "Web3",
     "question": "Solidity: interface functions must be",
     "right": "external",
-    "wrong": [
-      "public",
-      "internal"
-    ]
+    "wrong": ["public", "internal"]
   },
   {
     "topic": "Web3",
     "question": "Solidity 0.8: failing assert raises",
     "right": "Panic(uint256)",
-    "wrong": [
-      "Error(string)",
-      "no error data"
-    ]
+    "wrong": ["Error(string)", "no error data"]
   },
   {
     "topic": "Web3",
     "question": "Function selector size",
     "right": "4 bytes",
-    "wrong": [
-      "8 bytes",
-      "32 bytes"
-    ]
+    "wrong": ["8 bytes", "32 bytes"]
   },
   {
     "topic": "Web3",
     "question": "Ethereum address size",
     "right": "20 bytes",
-    "wrong": [
-      "32 bytes",
-      "64 bytes"
-    ]
+    "wrong": ["32 bytes", "64 bytes"]
   },
   {
     "topic": "Web3",
     "question": "Gas for a plain ETH transfer",
     "right": "21,000",
-    "wrong": [
-      "10,000",
-      "50,000"
-    ]
+    "wrong": ["10,000", "50,000"]
   },
   {
     "topic": "Web3",
     "question": "Gas prices are usually quoted in",
     "right": "gwei",
-    "wrong": [
-      "wei",
-      "ether"
-    ]
+    "wrong": ["wei", "ether"]
   },
   {
     "topic": "Web3",
     "question": "EIP-1559 base fee is",
     "right": "burned",
-    "wrong": [
-      "paid to validators",
-      "refunded to sender"
-    ]
+    "wrong": ["paid to validators", "refunded to sender"]
   },
   {
     "topic": "Web3",
     "question": "Ethereum consensus since The Merge",
     "right": "proof-of-stake",
-    "wrong": [
-      "proof-of-work",
-      "proof-of-authority"
-    ]
+    "wrong": ["proof-of-work", "proof-of-authority"]
   },
   {
     "topic": "Web3",
     "question": "Min ETH to activate a validator",
     "right": "32 ETH",
-    "wrong": [
-      "16 ETH",
-      "64 ETH"
-    ]
+    "wrong": ["16 ETH", "64 ETH"]
   },
   {
     "topic": "Web3",
     "question": "Chain ID of Ethereum mainnet",
     "right": "1",
-    "wrong": [
-      "0",
-      "137"
-    ]
+    "wrong": ["0", "137"]
   },
   {
     "topic": "Web3",
     "question": "Non-fungible token standard",
     "right": "ERC-721",
-    "wrong": [
-      "ERC-20",
-      "ERC-4626"
-    ]
+    "wrong": ["ERC-20", "ERC-4626"]
   },
   {
     "topic": "Web3",
     "question": "One contract, fungible and NFT tokens",
     "right": "ERC-1155",
-    "wrong": [
-      "ERC-721",
-      "ERC-20"
-    ]
+    "wrong": ["ERC-721", "ERC-20"]
   },
   {
     "topic": "Web3",
     "question": "Tokenized vault standard",
     "right": "ERC-4626",
-    "wrong": [
-      "ERC-1155",
-      "ERC-2612"
-    ]
+    "wrong": ["ERC-1155", "ERC-2612"]
   },
   {
     "topic": "Web3",
     "question": "ERC-20 approval via signature",
     "right": "permit (ERC-2612)",
-    "wrong": [
-      "approve",
-      "transferFrom"
-    ]
+    "wrong": ["approve", "transferFrom"]
   },
   {
     "topic": "Web3",
     "question": "Typed structured data signing",
     "right": "EIP-712",
-    "wrong": [
-      "EIP-1559",
-      "EIP-155"
-    ]
+    "wrong": ["EIP-1559", "EIP-155"]
   },
   {
     "topic": "Web3",
     "question": "Contract signature validation standard",
     "right": "ERC-1271",
-    "wrong": [
-      "ERC-165",
-      "EIP-712"
-    ]
+    "wrong": ["ERC-165", "EIP-712"]
   },
   {
     "topic": "Web3",
     "question": "Lets an EOA set contract code",
     "right": "EIP-7702",
-    "wrong": [
-      "ERC-4337",
-      "EIP-4844"
-    ]
+    "wrong": ["ERC-4337", "EIP-4844"]
   },
   {
     "topic": "Web3",
     "question": "EIP that added blob transactions",
     "right": "EIP-4844",
-    "wrong": [
-      "EIP-1559",
-      "EIP-7702"
-    ]
+    "wrong": ["EIP-1559", "EIP-7702"]
   },
   {
     "topic": "Web3",
     "question": "Wallet RPC that asks to connect",
     "right": "eth_requestAccounts",
-    "wrong": [
-      "eth_chainId",
-      "eth_getBalance"
-    ]
+    "wrong": ["eth_chainId", "eth_getBalance"]
   },
   {
     "topic": "Web3",
     "question": "Curve for Ethereum tx signatures",
     "right": "secp256k1",
-    "wrong": [
-      "ed25519",
-      "P-256"
-    ]
+    "wrong": ["ed25519", "P-256"]
   },
   {
     "topic": "Web3",
     "question": "delegatecall uses whose storage?",
     "right": "the caller's",
-    "wrong": [
-      "the callee's",
-      "a fresh copy"
-    ]
+    "wrong": ["the callee's", "a fresh copy"]
   },
   {
     "topic": "Web3",
     "question": "Address from deployer, salt, init code",
     "right": "CREATE2",
-    "wrong": [
-      "CREATE",
-      "CALL"
-    ]
+    "wrong": ["CREATE", "CALL"]
   },
   {
     "topic": "CS",
     "question": "Hash table lookup, average case",
     "right": "O(1)",
-    "wrong": [
-      "O(log n)",
-      "O(n)"
-    ]
+    "wrong": ["O(log n)", "O(n)"]
   },
   {
     "topic": "CS",
     "question": "BFS visits nodes using a",
     "right": "queue",
-    "wrong": [
-      "stack",
-      "trie"
-    ]
+    "wrong": ["stack", "trie"]
   },
   {
     "topic": "CS",
     "question": "Merge sort worst case",
     "right": "O(n log n)",
-    "wrong": [
-      "O(n^2)",
-      "O(n)"
-    ]
+    "wrong": ["O(n^2)", "O(n)"]
   },
   {
     "topic": "CS",
     "question": "Quicksort worst case",
     "right": "O(n^2)",
-    "wrong": [
-      "O(n log n)",
-      "O(log n)"
-    ]
+    "wrong": ["O(n log n)", "O(log n)"]
   },
   {
     "topic": "CS",
     "question": "Dijkstra gives wrong results with",
     "right": "negative edge weights",
-    "wrong": [
-      "cycles",
-      "undirected edges"
-    ]
+    "wrong": ["cycles", "undirected edges"]
   },
   {
     "topic": "CS",
     "question": "Pop min from a binary heap",
     "right": "O(log n)",
-    "wrong": [
-      "O(1)",
-      "O(n)"
-    ]
+    "wrong": ["O(1)", "O(n)"]
   },
   {
     "topic": "CS",
     "question": "Linked list: insert at head",
     "right": "O(1)",
-    "wrong": [
-      "O(n)",
-      "O(log n)"
-    ]
+    "wrong": ["O(n)", "O(log n)"]
   },
   {
     "topic": "CS",
     "question": "Topological sort requires a",
     "right": "DAG",
-    "wrong": [
-      "cyclic graph",
-      "undirected graph"
-    ]
+    "wrong": ["cyclic graph", "undirected graph"]
   },
   {
     "topic": "CS",
     "question": "Which of these sorts is stable?",
     "right": "merge sort",
-    "wrong": [
-      "heapsort",
-      "quicksort"
-    ]
+    "wrong": ["heapsort", "quicksort"]
   },
   {
     "topic": "CS",
     "question": "TCP handshake order",
     "right": "SYN, SYN-ACK, ACK",
-    "wrong": [
-      "SYN, ACK, FIN",
-      "ACK, SYN, SYN-ACK"
-    ]
+    "wrong": ["SYN, ACK, FIN", "ACK, SYN, SYN-ACK"]
   },
   {
     "topic": "CS",
     "question": "DNS queries use port",
     "right": "53",
-    "wrong": [
-      "25",
-      "67"
-    ]
+    "wrong": ["25", "67"]
   },
   {
     "topic": "CS",
     "question": "Connectionless transport protocol",
     "right": "UDP",
-    "wrong": [
-      "TCP",
-      "SCTP"
-    ]
+    "wrong": ["TCP", "SCTP"]
   },
   {
     "topic": "CS",
     "question": "IPv6 address size",
     "right": "128 bits",
-    "wrong": [
-      "64 bits",
-      "32 bits"
-    ]
+    "wrong": ["64 bits", "32 bits"]
   },
   {
     "topic": "CS",
     "question": "HTTP/3 runs over",
     "right": "QUIC",
-    "wrong": [
-      "TCP",
-      "SCTP"
-    ]
+    "wrong": ["TCP", "SCTP"]
   },
   {
     "topic": "CS",
     "question": "A Bloom filter can return",
     "right": "false positives",
-    "wrong": [
-      "false negatives",
-      "exact counts"
-    ]
+    "wrong": ["false negatives", "exact counts"]
   },
   {
     "topic": "CS",
     "question": "O(1) LRU cache is built from",
     "right": "hash map + linked list",
-    "wrong": [
-      "sorted array",
-      "binary heap"
-    ]
+    "wrong": ["sorted array", "binary heap"]
   },
   {
     "topic": "CS",
     "question": "Best structure for prefix search",
     "right": "trie",
-    "wrong": [
-      "heap",
-      "stack"
-    ]
+    "wrong": ["heap", "stack"]
   },
   {
     "topic": "CS",
     "question": "Dynamic array append, amortized",
     "right": "O(1)",
-    "wrong": [
-      "O(n)",
-      "O(log n)"
-    ]
+    "wrong": ["O(n)", "O(log n)"]
   },
   {
     "topic": "CS",
     "question": "OSI layer of IP",
     "right": "network (L3)",
-    "wrong": [
-      "transport (L4)",
-      "data link (L2)"
-    ]
+    "wrong": ["transport (L4)", "data link (L2)"]
   },
   {
     "topic": "AI",
     "question": "Usual metric to compare embeddings",
     "right": "cosine similarity",
-    "wrong": [
-      "edit distance",
-      "BLEU score"
-    ]
+    "wrong": ["edit distance", "BLEU score"]
   },
   {
     "topic": "AI",
     "question": "RAG stands for retrieval-augmented",
     "right": "generation",
-    "wrong": [
-      "gradients",
-      "graphs"
-    ]
+    "wrong": ["gradients", "graphs"]
   },
   {
     "topic": "AI",
     "question": "LLM states false facts confidently",
     "right": "hallucination",
-    "wrong": [
-      "overfitting",
-      "tokenization"
-    ]
+    "wrong": ["overfitting", "tokenization"]
   },
   {
     "topic": "AI",
     "question": "Giving examples in the prompt",
     "right": "few-shot prompting",
-    "wrong": [
-      "fine-tuning",
-      "zero-shot prompting"
-    ]
+    "wrong": ["fine-tuning", "zero-shot prompting"]
   },
   {
     "topic": "AI",
     "question": "Asking for step-by-step reasoning",
     "right": "chain-of-thought",
-    "wrong": [
-      "beam search",
-      "RLHF"
-    ]
+    "wrong": ["beam search", "RLHF"]
   },
   {
     "topic": "AI",
     "question": "Nucleus sampling is also called",
     "right": "top-p sampling",
-    "wrong": [
-      "top-k sampling",
-      "greedy decoding"
-    ]
+    "wrong": ["top-k sampling", "greedy decoding"]
   },
   {
     "topic": "AI",
     "question": "Attack via instructions in fetched docs",
     "right": "prompt injection",
-    "wrong": [
-      "data poisoning",
-      "model drift"
-    ]
+    "wrong": ["data poisoning", "model drift"]
   },
   {
     "topic": "AI",
     "question": "LLM asks your app to run a function",
     "right": "tool calling",
-    "wrong": [
-      "fine-tuning",
-      "embedding"
-    ]
+    "wrong": ["fine-tuning", "embedding"]
   },
   {
     "topic": "AI",
     "question": "Agent pattern: reason, act, observe",
     "right": "ReAct",
-    "wrong": [
-      "LoRA",
-      "RLHF"
-    ]
+    "wrong": ["LoRA", "RLHF"]
   },
   {
     "topic": "AI",
     "question": "Fine-tune with small low-rank adapters",
     "right": "LoRA",
-    "wrong": [
-      "RAG",
-      "beam search"
-    ]
+    "wrong": ["RAG", "beam search"]
   },
   {
     "topic": "AI",
     "question": "Training on human preference feedback",
     "right": "RLHF",
-    "wrong": [
-      "RAG",
-      "LoRA"
-    ]
+    "wrong": ["RAG", "LoRA"]
   },
   {
     "topic": "AI",
     "question": "Storing weights in 4 or 8 bits",
     "right": "quantization",
-    "wrong": [
-      "distillation",
-      "pruning"
-    ]
+    "wrong": ["distillation", "pruning"]
   },
   {
     "topic": "AI",
     "question": "Small model trained to mimic a big one",
     "right": "distillation",
-    "wrong": [
-      "quantization",
-      "tokenization"
-    ]
+    "wrong": ["quantization", "tokenization"]
   },
   {
     "topic": "AI",
     "question": "Using an LLM to grade model outputs",
     "right": "LLM-as-a-judge",
-    "wrong": [
-      "self-attention",
-      "beam search"
-    ]
+    "wrong": ["self-attention", "beam search"]
   },
   {
     "topic": "AI",
     "question": "Core mechanism of a Transformer",
     "right": "self-attention",
-    "wrong": [
-      "convolution",
-      "recurrence"
-    ]
+    "wrong": ["convolution", "recurrence"]
   },
   {
     "topic": "AI",
     "question": "Cheaper reuse of a long prompt prefix",
     "right": "prompt caching",
-    "wrong": [
-      "higher temperature",
-      "bigger context window"
-    ]
+    "wrong": ["higher temperature", "bigger context window"]
   },
   {
     "topic": "AI",
     "question": "Force output to match a JSON schema",
     "right": "structured outputs",
-    "wrong": [
-      "higher top-p",
-      "longer system prompt"
-    ]
+    "wrong": ["higher top-p", "longer system prompt"]
   },
   {
     "topic": "AI",
     "question": "RAG: splitting docs into pieces",
     "right": "chunking",
-    "wrong": [
-      "batching",
-      "pooling"
-    ]
+    "wrong": ["batching", "pooling"]
   },
   {
     "topic": "AI",
     "question": "LM metric where lower is better",
     "right": "perplexity",
-    "wrong": [
-      "accuracy",
-      "BLEU score"
-    ]
+    "wrong": ["accuracy", "BLEU score"]
   },
   {
     "topic": "AI",
     "question": "Common RAG reranker model type",
     "right": "cross-encoder",
-    "wrong": [
-      "autoencoder",
-      "tokenizer"
-    ]
+    "wrong": ["autoencoder", "tokenizer"]
   }
 ]

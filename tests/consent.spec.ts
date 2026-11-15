@@ -4,14 +4,14 @@ import { expect, test, type BrowserContext, type Page } from "@playwright/test";
 // machine, so this proves the consent gate and the CSP, not the real Firebase project.
 const google =
   /googletagmanager\.com|google-analytics\.com|analytics\.google\.com|firebase(installations)?\.googleapis\.com/;
-const gtag = /googletagmanager\.com\/gtag\/js/;
+const gtag = "googletagmanager.com/gtag/js";
 
 async function watch(page: Page, context: BrowserContext) {
   const requests: string[] = [];
   const errors: string[] = [];
   await context.route(google, (route) => {
     const url = route.request().url();
-    if (gtag.test(url)) return route.fulfill({ contentType: "text/javascript", body: "" });
+    if (url.includes(gtag)) return route.fulfill({ contentType: "text/javascript", body: "" });
     if (url.includes("firebaseinstallations")) {
       return route.fulfill({
         json: {
@@ -70,9 +70,9 @@ test("Allow loads the analytics script once, within the CSP", async ({ page, con
   const seen = await watch(page, context);
   await page.goto("/");
   await consentBar(page).getByRole("button", { name: "Allow" }).click();
-  await expect.poll(() => seen.requests.filter((u) => gtag.test(u)).length).toBe(1);
+  await expect.poll(() => seen.requests.filter((u) => u.includes(gtag)).length).toBe(1);
   await page.waitForTimeout(1000);
-  expect(seen.requests.filter((u) => gtag.test(u))).toHaveLength(1);
+  expect(seen.requests.filter((u) => u.includes(gtag))).toHaveLength(1);
   expect(seen.errors).toEqual([]);
 });
 
@@ -106,7 +106,7 @@ test("a later withdrawal stops collection, removes GA cookies and reloads denied
   const seen = await watch(page, context);
   await page.goto("/privacy");
   await page.getByRole("button", { name: "Allow statistics" }).click();
-  await expect.poll(() => seen.requests.filter((u) => gtag.test(u)).length).toBe(1);
+  await expect.poll(() => seen.requests.filter((u) => u.includes(gtag)).length).toBe(1);
   await context.addCookies([
     { name: "_ga", value: "GA1.1.1", url: baseURL ?? "" },
     { name: "_ga_FIXTURE000", value: "GS1.1", url: baseURL ?? "" },

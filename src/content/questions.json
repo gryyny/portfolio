@@ -1,0 +1,224 @@
+[
+  {
+    "topic": "JS",
+    "question": "typeof null",
+    "right": "object",
+    "wrong": ["null", "undefined"]
+  },
+  {
+    "topic": "JS",
+    "question": "0.1 + 0.2 === 0.3",
+    "right": "false",
+    "wrong": ["true", "TypeError"]
+  },
+  {
+    "topic": "JS",
+    "question": "'5' - 2",
+    "right": "3",
+    "wrong": ["'52'", "NaN"]
+  },
+  {
+    "topic": "JS",
+    "question": "'5' + 2",
+    "right": "'52'",
+    "wrong": ["7", "NaN"]
+  },
+  {
+    "topic": "JS",
+    "question": "NaN === NaN",
+    "right": "false",
+    "wrong": ["true", "NaN"]
+  },
+  {
+    "topic": "JS",
+    "question": "Block-scoped declaration",
+    "right": "let",
+    "wrong": ["var", "function"]
+  },
+  {
+    "topic": "JS",
+    "question": "Does not mutate the array",
+    "right": "map",
+    "wrong": ["splice", "sort"]
+  },
+  {
+    "topic": "JS",
+    "question": "=== compares",
+    "right": "value and type",
+    "wrong": ["value only", "references only"]
+  },
+  {
+    "topic": "JS",
+    "question": "Promise.all rejects when",
+    "right": "any one rejects",
+    "wrong": ["all reject", "the last rejects"]
+  },
+  {
+    "topic": "TS",
+    "question": "Safe \"anything\" type",
+    "right": "unknown",
+    "wrong": ["any", "never"]
+  },
+  {
+    "topic": "TS",
+    "question": "Type of a function that never returns",
+    "right": "never",
+    "wrong": ["void", "null"]
+  },
+  {
+    "topic": "React",
+    "question": "Update state from previous value",
+    "right": "setN(n => n + 1)",
+    "wrong": ["n++", "setN(n++)"]
+  },
+  {
+    "topic": "React",
+    "question": "Hook for side effects",
+    "right": "useEffect",
+    "wrong": ["useMemo", "useRef"]
+  },
+  {
+    "topic": "React",
+    "question": "List items need a stable",
+    "right": "key",
+    "wrong": ["ref", "id prop"]
+  },
+  {
+    "topic": "React",
+    "question": "Call hooks inside an if?",
+    "right": "No",
+    "wrong": ["Yes", "Only in effects"]
+  },
+  {
+    "topic": "Git",
+    "question": "Undo last commit, keep changes",
+    "right": "reset --soft HEAD~1",
+    "wrong": ["reset --hard HEAD~1", "git revert HEAD"]
+  },
+  {
+    "topic": "Git",
+    "question": "Download remote changes without merging",
+    "right": "git fetch",
+    "wrong": ["git pull", "git clone"]
+  },
+  {
+    "topic": "Git",
+    "question": "Fix the last commit message",
+    "right": "commit --amend",
+    "wrong": ["git revert", "git stash"]
+  },
+  {
+    "topic": "HTTP",
+    "question": "Status: not found",
+    "right": "404",
+    "wrong": ["500", "403"]
+  },
+  {
+    "topic": "HTTP",
+    "question": "Status: too many requests",
+    "right": "429",
+    "wrong": ["418", "503"]
+  },
+  {
+    "topic": "HTTP",
+    "question": "Status: not signed in",
+    "right": "401",
+    "wrong": ["403", "400"]
+  },
+  {
+    "topic": "HTTP",
+    "question": "Idempotent method",
+    "right": "PUT",
+    "wrong": ["POST", "PATCH"]
+  },
+  {
+    "topic": "HTTP",
+    "question": "CORS is enforced by",
+    "right": "the browser",
+    "wrong": ["the server", "the CDN"]
+  },
+  {
+    "topic": "HTTP",
+    "question": "Default HTTPS port",
+    "right": "443",
+    "wrong": ["80", "8080"]
+  },
+  {
+    "topic": "SQL",
+    "question": "Filter after GROUP BY",
+    "right": "HAVING",
+    "wrong": ["WHERE", "ORDER BY"]
+  },
+  {
+    "topic": "SQL",
+    "question": "Delete all rows, keep the table",
+    "right": "TRUNCATE",
+    "wrong": ["DROP", "ALTER"]
+  },
+  {
+    "topic": "Web3",
+    "question": "Solidity: read-only function",
+    "right": "view",
+    "wrong": ["payable", "external"]
+  },
+  {
+    "topic": "Web3",
+    "question": "1 ether in wei",
+    "right": "10^18",
+    "wrong": ["10^9", "10^6"]
+  },
+  {
+    "topic": "Web3",
+    "question": "ERC-20 tokens are",
+    "right": "fungible",
+    "wrong": ["non-fungible", "soulbound"]
+  },
+  {
+    "topic": "Web3",
+    "question": "Gas payer of a plain Ethereum tx",
+    "right": "the sender",
+    "wrong": ["the receiver", "the validator"]
+  },
+  {
+    "topic": "Web3",
+    "question": "Reentrancy defense",
+    "right": "checks-effects-interactions",
+    "wrong": ["interactions first", "more gas"]
+  },
+  {
+    "topic": "Ops",
+    "question": "File that builds a Docker image",
+    "right": "Dockerfile",
+    "wrong": ["compose.yaml", ".dockerignore"]
+  },
+  {
+    "topic": "CS",
+    "question": "Binary search time",
+    "right": "O(log n)",
+    "wrong": ["O(n)", "O(n log n)"]
+  },
+  {
+    "topic": "CS",
+    "question": "A stack is",
+    "right": "LIFO",
+    "wrong": ["FIFO", "random access only"]
+  },
+  {
+    "topic": "CS",
+    "question": "Regex: one or more",
+    "right": "+",
+    "wrong": ["*", "?"]
+  },
+  {
+    "topic": "AI",
+    "question": "LLM context is measured in",
+    "right": "tokens",
+    "wrong": ["lines", "bytes"]
+  },
+  {
+    "topic": "AI",
+    "question": "More predictable LLM output: lower the",
+    "right": "temperature",
+    "wrong": ["context size", "max tokens"]
+  }
+]

@@ -37,11 +37,11 @@ export const metadata: Metadata = {
     url: "/",
     siteName: "gryyny.si",
     title,
-    description: profile.description,
+    description: profile.sharePreview,
     firstName: profile.givenName,
     lastName: profile.familyName,
   },
-  twitter: { card: "summary_large_image", title, description: profile.description },
+  twitter: { card: "summary_large_image", title, description: profile.sharePreview },
 };
 
 export const viewport: Viewport = {

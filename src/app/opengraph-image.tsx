@@ -35,9 +35,6 @@ export default function OpenGraphImage() {
           {profile.name}
         </div>
         <div style={{ display: "flex", fontSize: 34, color: accent }}>{profile.headline}</div>
-        <div style={{ display: "flex", fontSize: 28, color: "#9aa6bf", maxWidth: 900 }}>
-          {profile.summary}
-        </div>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
         {[0, 1, 2, 3].map((i) => (

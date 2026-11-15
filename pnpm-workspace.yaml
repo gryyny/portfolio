@@ -1,0 +1,7 @@
+# Refuse any direct or transitive package version published less than 14 days ago.
+minimumReleaseAge: 20160
+
+# Firebase's and protobufjs's install scripts are not needed for the browser bundle.
+ignoredBuiltDependencies:
+  - "@firebase/util"
+  - protobufjs

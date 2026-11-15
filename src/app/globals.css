@@ -172,6 +172,18 @@ p {
   padding: 8px 12px;
 }
 
+/* One line tall and equal padding: square, and the same height as the text buttons. */
+.links a.icon {
+  display: inline-flex;
+  padding: 8px;
+}
+
+.links a.icon svg {
+  width: 1lh;
+  height: 1lh;
+  fill: currentColor;
+}
+
 .links a:hover {
   border-color: var(--accent);
   color: var(--accent);
@@ -241,6 +253,10 @@ p {
 .stage:not([data-phase="attract"]) .hero .links a {
   font-size: 11px;
   padding: 4px 8px;
+}
+
+.stage:not([data-phase="attract"]) .hero .links a.icon {
+  padding: 4px;
 }
 
 .hud {
@@ -558,6 +574,11 @@ p {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
+  }
+
+  .links a.icon {
+    min-width: 44px;
+    justify-content: center;
   }
 }
 

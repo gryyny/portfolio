@@ -7,6 +7,8 @@ export type Consent = "granted" | "denied" | "unset";
 type Params = Record<string, string | number | boolean>;
 
 const KEY = "gsd-consent";
+// Created by the Firebase SDK only after Allow; removed again on withdrawal.
+const FIREBASE_DATABASES = ["firebase-installations-database", "firebase-heartbeat-database"];
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
@@ -87,5 +89,24 @@ async function stopAnalytics(): Promise<void> {
       document.cookie = `${name}=; Max-Age=0; path=/${domain}`;
     }
   }
+  // Close the SDK's IndexedDB connections first, so deleting its databases is not blocked.
+  const { deleteApp } = await import("firebase/app");
+  await deleteApp(instance.app).catch(() => undefined);
+  await Promise.all(FIREBASE_DATABASES.map(deleteDatabase));
   location.reload();
+}
+
+function deleteDatabase(name: string): Promise<void> {
+  return new Promise((resolve) => {
+    const request = indexedDB.deleteDatabase(name);
+    request.onsuccess = () => {
+      resolve();
+    };
+    request.onerror = () => {
+      resolve();
+    };
+    request.onblocked = () => {
+      resolve();
+    };
+  });
 }

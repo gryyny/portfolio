@@ -5,7 +5,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const imported = vi.hoisted(() => ({ app: 0, analytics: 0 }));
 const firebase = vi.hoisted(() => ({
   initializeApp: vi.fn(() => ({})),
-  getAnalytics: vi.fn(() => ({ analytics: true })),
+  deleteApp: vi.fn(() => Promise.resolve()),
+  getAnalytics: vi.fn(() => ({ analytics: true, app: {} })),
   isSupported: vi.fn(() => Promise.resolve(true)),
   logEvent: vi.fn(),
   setAnalyticsCollectionEnabled: vi.fn(),
@@ -13,7 +14,7 @@ const firebase = vi.hoisted(() => ({
 // The factories count module evaluations, so an eager SDK import fails the "nothing" cases.
 vi.mock("firebase/app", () => {
   imported.app++;
-  return { initializeApp: firebase.initializeApp };
+  return { initializeApp: firebase.initializeApp, deleteApp: firebase.deleteApp };
 });
 vi.mock("firebase/analytics", () => {
   imported.analytics++;
@@ -26,6 +27,7 @@ vi.mock("firebase/analytics", () => {
 });
 
 const reload = vi.fn();
+let deletedDatabases: string[] = [];
 let cookies: string[] = [];
 let stored: Map<string, string>;
 
@@ -47,6 +49,15 @@ beforeEach(() => {
     setItem: (k: string, v: string) => stored.set(k, v),
   });
   vi.stubGlobal("location", { hostname: "gryyny.si", reload });
+  deletedDatabases = [];
+  vi.stubGlobal("indexedDB", {
+    deleteDatabase: (name: string) => {
+      deletedDatabases.push(name);
+      const request: { onsuccess?: () => void } = {};
+      setTimeout(() => request.onsuccess?.(), 0);
+      return request;
+    },
+  });
   vi.stubGlobal("document", {
     get cookie() {
       return cookies.join("; ");
@@ -110,7 +121,11 @@ describe("consent gate with a configured Firebase project", () => {
     analytics.track("game_start");
     await settle();
     expect(firebase.initializeApp).toHaveBeenCalledTimes(1);
-    expect(firebase.logEvent).toHaveBeenCalledWith({ analytics: true }, "game_start", undefined);
+    expect(firebase.logEvent).toHaveBeenCalledWith(
+      { analytics: true, app: {} },
+      "game_start",
+      undefined,
+    );
   });
 
   it("never initializes when consent is withdrawn while the SDK is still loading", async () => {
@@ -128,14 +143,24 @@ describe("consent gate with a configured Firebase project", () => {
     expect(reload).not.toHaveBeenCalled();
   });
 
-  it("disables collection, removes GA cookies and reloads on withdrawal", async () => {
+  it("disables collection, removes GA cookies and Firebase databases, then reloads", async () => {
     const analytics = await load();
     analytics.setConsent("granted");
     await settle();
     analytics.setConsent("denied");
-    await settle();
-    expect(firebase.setAnalyticsCollectionEnabled).toHaveBeenCalledWith({ analytics: true }, false);
+    await vi.waitFor(() => {
+      expect(reload).toHaveBeenCalledTimes(1);
+    });
+    expect(firebase.setAnalyticsCollectionEnabled).toHaveBeenCalledWith(
+      { analytics: true, app: {} },
+      false,
+    );
     expect(cookies).toEqual([]);
+    expect(firebase.deleteApp).toHaveBeenCalledTimes(1);
+    expect(deletedDatabases.sort()).toEqual([
+      "firebase-heartbeat-database",
+      "firebase-installations-database",
+    ]);
     expect(reload).toHaveBeenCalledTimes(1);
   });
 });

@@ -17,21 +17,34 @@ export default function Privacy() {
           <Link href="/">← gryyny.si</Link>
         </p>
         <h1>Privacy</h1>
+        <p>Last updated: 15 November 2026.</p>
         <p>
           This site has no accounts and no forms. It keeps a few values in your browser and, only if
           you allow it, sends usage statistics to Google.
         </p>
 
+        <h2>Who is responsible</h2>
+        <p>
+          {profile.name}, <a href={`mailto:${profile.email}`}>{profile.email}</a>.
+        </p>
+
         <h2>Usage statistics</h2>
         <ul>
           <li>
-            Provider: Google Analytics for Firebase (Google). It loads only after you choose Allow.
-            Before that, the site makes no request to Google.
+            Provider: Google Analytics for Firebase. It loads only after you choose Allow. Before
+            that, the site makes no request to Google.
+          </li>
+          <li>
+            Legal basis: your consent. You can withdraw it at any time below; this does not affect
+            use before the withdrawal.
+          </li>
+          <li>
+            Google processes the data on my behalf as a processor and may transfer it to the US
+            under the EU-US Data Privacy Framework.
           </li>
           <li>
             What it collects: page views, the game events listed below, device and browser details,
-            approximate location derived from your IP address, and a pseudonymous identifier stored
-            in <code>_ga</code> cookies.
+            approximate location derived from your IP address, and a pseudonymous identifier.
           </li>
           <li>
             Game events: game start, level complete, AI perk outcome, quiz answer, game over, clicks
@@ -41,7 +54,7 @@ export default function Privacy() {
         </ul>
         <ConsentSettings />
         <p>
-          Withdrawing stops collection, removes the <code>_ga</code> cookies for this site and
+          Withdrawing stops collection, removes the analytics cookies and databases listed below and
           reloads the page without the analytics code.
         </p>
 
@@ -56,12 +69,23 @@ export default function Privacy() {
           <li>
             <code>gsd-asked</code>: that the one-time &quot;Enjoying it?&quot; card was shown.
           </li>
+          <li>
+            Only after Allow: <code>_ga</code> cookies and the IndexedDB databases{" "}
+            <code>firebase-installations-database</code> and{" "}
+            <code>firebase-heartbeat-database</code>.
+          </li>
         </ul>
         <p>Clearing this site&apos;s data in your browser removes all of them.</p>
 
-        <h2>Questions</h2>
+        <h2>Your rights</h2>
         <p>
-          Write to <a href={`mailto:${profile.email}`}>{profile.email}</a>.
+          You can ask to see the data about you or to have it deleted: write to{" "}
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>. You can also complain to the
+          Slovenian data protection authority,{" "}
+          <a href="https://www.ip-rs.si/" target="_blank" rel="noopener">
+            Informacijski pooblaščenec
+          </a>
+          .
         </p>
       </article>
     </main>

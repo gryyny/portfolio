@@ -44,6 +44,13 @@ async function gaCookies(context: BrowserContext) {
   return (await context.cookies()).filter((c) => c.name.startsWith("_ga"));
 }
 
+async function firebaseDatabases(page: Page) {
+  const names = await page.evaluate(async () =>
+    (await indexedDB.databases()).map((db) => db.name ?? ""),
+  );
+  return names.filter((name) => name.startsWith("firebase-"));
+}
+
 const consentBar = (page: Page) => page.getByRole("region", { name: "Usage statistics" });
 
 test("a fresh visit and a stored denial load no Firebase and send nothing", async ({
@@ -98,7 +105,7 @@ test("withdrawing while the SDK is still loading prevents initialization", async
   expect(seen.errors).toEqual([]);
 });
 
-test("a later withdrawal stops collection, removes GA cookies and reloads denied", async ({
+test("a later withdrawal stops collection, removes GA cookies and Firebase databases, reloads denied", async ({
   page,
   context,
   baseURL,
@@ -107,6 +114,7 @@ test("a later withdrawal stops collection, removes GA cookies and reloads denied
   await page.goto("/privacy");
   await page.getByRole("button", { name: "Allow statistics" }).click();
   await expect.poll(() => seen.requests.filter((u) => u.includes(gtag)).length).toBe(1);
+  await expect.poll(() => firebaseDatabases(page)).not.toEqual([]);
   await context.addCookies([
     { name: "_ga", value: "GA1.1.1", url: baseURL ?? "" },
     { name: "_ga_FIXTURE000", value: "GS1.1", url: baseURL ?? "" },
@@ -117,6 +125,7 @@ test("a later withdrawal stops collection, removes GA cookies and reloads denied
   ]);
   await expect(page.getByText("not allowed")).toBeVisible();
   expect(await gaCookies(context)).toEqual([]);
+  expect(await firebaseDatabases(page)).toEqual([]);
   const before = seen.requests.length;
   await page.waitForTimeout(1000);
   expect(seen.requests).toHaveLength(before);

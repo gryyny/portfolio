@@ -1,12 +1,6 @@
 import { config } from "./config";
 import type { Vec } from "./core";
 
-export interface Joystick {
-  baseX: number;
-  baseY: number;
-  x: number;
-  y: number;
-}
 /** "move": steering and all commands; "commands": pause/resume only; "off": nothing. */
 export type InputMode = "move" | "commands" | "off";
 export type Command = { type: "pause" } | { type: "answer"; index: number };
@@ -27,9 +21,17 @@ function keyboardVector(keys: ReadonlySet<string>): Vec {
   return combine(...[...keys].map((k) => MOVES[k] ?? { x: 0, y: 0 }));
 }
 
-function joystickVector(j: Joystick): Vec {
-  const r = config.joystick.radius;
-  return combine({ x: (j.x - j.baseX) / r, y: (j.y - j.baseY) / r });
+/**
+ * Turns a thumb's offset from the stick's centre (px) into movement in [-1, 1]. Inside the dead
+ * zone it is zero, so touching the stick never moves the player by itself.
+ */
+export function stickVector(offset: Vec): Vec {
+  const { radius, deadZone } = config.joystick;
+  const d = Math.hypot(offset.x, offset.y);
+  const dead = radius * deadZone;
+  if (d <= dead) return { x: 0, y: 0 };
+  const m = Math.min(1, (d - dead) / (radius - dead));
+  return { x: (offset.x / d) * m, y: (offset.y / d) * m };
 }
 
 /** Maps device beta/gamma (degrees) into screen axes for the current screen rotation. */
@@ -74,23 +76,28 @@ interface OrientationPermission {
   requestPermission?: () => Promise<PermissionState>;
 }
 
+interface Steering {
+  move: Vec;
+  /** True while the stick is held and on the frame it is let go: the core skips inertia. */
+  direct: boolean;
+}
+
 export interface Input {
-  movement(): Vec;
-  joystick(): Joystick | null;
+  steering(): Steering;
   enableTilt(): Promise<TiltResult>;
   disableTilt(): void;
   reset(): void;
   dispose(): void;
 }
 
-/** Browser adapters: keyboard, a floating joystick on the canvas and opt-in tilt. */
+/** Browser adapters: keyboard, a fixed on-screen stick (any `.stick` in `stage`) and opt-in tilt. */
 export function createInput(
-  canvas: HTMLCanvasElement,
+  stage: HTMLElement,
   options: { mode: () => InputMode; onCommand: (command: Command) => void },
 ): Input {
   const keys = new Set<string>();
-  let stick: Joystick | null = null;
-  let pointerId: number | null = null;
+  let stick: { id: number; el: HTMLElement; offset: Vec } | null = null;
+  let released = false;
   let tilt: Tilt | null = null;
 
   const onKeyDown = (e: KeyboardEvent) => {
@@ -117,28 +124,34 @@ export function createInput(
     keys.clear();
   };
 
-  const local = (e: PointerEvent) => {
-    const r = canvas.getBoundingClientRect();
-    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  const releaseStick = () => {
+    if (!stick) return;
+    stick.el.querySelector("i")?.style.removeProperty("transform");
+    stick = null;
+    released = true;
   };
   const onPointerDown = (e: PointerEvent) => {
-    if (options.mode() !== "move" || pointerId !== null) return;
-    const p = local(e);
-    pointerId = e.pointerId;
-    stick = { baseX: p.x, baseY: p.y, x: p.x, y: p.y };
-    canvas.setPointerCapture(e.pointerId);
+    const el = e.target instanceof Element ? e.target.closest<HTMLElement>(".stick") : null;
+    if (!el || stick || options.mode() !== "move") return;
+    stick = { id: e.pointerId, el, offset: { x: 0, y: 0 } };
+    el.setPointerCapture(e.pointerId);
     e.preventDefault();
+    onPointerMove(e);
   };
   const onPointerMove = (e: PointerEvent) => {
-    if (!stick || e.pointerId !== pointerId) return;
-    const p = local(e);
-    stick.x = p.x;
-    stick.y = p.y;
+    if (e.pointerId !== stick?.id) return;
+    const r = stick.el.getBoundingClientRect();
+    const offset = { x: e.clientX - (r.left + r.width / 2), y: e.clientY - (r.top + r.height / 2) };
+    stick.offset = offset;
+    const { radius } = config.joystick;
+    const d = Math.hypot(offset.x, offset.y);
+    const k = d > radius ? radius / d : 1;
+    stick.el
+      .querySelector("i")
+      ?.style.setProperty("transform", `translate(${offset.x * k}px, ${offset.y * k}px)`);
   };
   const onPointerEnd = (e: PointerEvent) => {
-    if (e.pointerId !== pointerId) return;
-    stick = null;
-    pointerId = null;
+    if (e.pointerId === stick?.id) releaseStick();
   };
 
   const onOrientation = (e: DeviceOrientationEvent) => {
@@ -157,20 +170,23 @@ export function createInput(
   addEventListener("keydown", onKeyDown);
   addEventListener("keyup", onKeyUp);
   addEventListener("blur", onBlur);
-  canvas.addEventListener("pointerdown", onPointerDown);
-  canvas.addEventListener("pointermove", onPointerMove);
-  canvas.addEventListener("pointerup", onPointerEnd);
-  canvas.addEventListener("pointercancel", onPointerEnd);
+  stage.addEventListener("pointerdown", onPointerDown);
+  stage.addEventListener("pointermove", onPointerMove);
+  stage.addEventListener("pointerup", onPointerEnd);
+  stage.addEventListener("pointercancel", onPointerEnd);
+  stage.addEventListener("lostpointercapture", onPointerEnd);
   screen.orientation.addEventListener("change", recalibrate);
 
   return {
-    movement() {
+    steering() {
+      // The stick wins outright: touch and tilt never add together.
+      if (stick) return { move: stickVector(stick.offset), direct: true };
+      const direct = released;
+      released = false;
       const parts = [keyboardVector(keys)];
-      if (stick) parts.push(joystickVector(stick));
       if (tilt?.neutral) parts.push(tiltVector(tilt.reading, tilt.neutral));
-      return combine(...parts);
+      return { move: combine(...parts), direct };
     },
-    joystick: () => stick,
     async enableTilt() {
       if (!("DeviceOrientationEvent" in window)) return "unavailable";
       const { requestPermission } = DeviceOrientationEvent as OrientationPermission;
@@ -190,18 +206,18 @@ export function createInput(
     disableTilt,
     reset() {
       keys.clear();
-      stick = null;
-      pointerId = null;
+      releaseStick();
     },
     dispose() {
       disableTilt();
       removeEventListener("keydown", onKeyDown);
       removeEventListener("keyup", onKeyUp);
       removeEventListener("blur", onBlur);
-      canvas.removeEventListener("pointerdown", onPointerDown);
-      canvas.removeEventListener("pointermove", onPointerMove);
-      canvas.removeEventListener("pointerup", onPointerEnd);
-      canvas.removeEventListener("pointercancel", onPointerEnd);
+      stage.removeEventListener("pointerdown", onPointerDown);
+      stage.removeEventListener("pointermove", onPointerMove);
+      stage.removeEventListener("pointerup", onPointerEnd);
+      stage.removeEventListener("pointercancel", onPointerEnd);
+      stage.removeEventListener("lostpointercapture", onPointerEnd);
       screen.orientation.removeEventListener("change", recalibrate);
     },
   };

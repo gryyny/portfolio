@@ -313,3 +313,57 @@ describe("AI chip", () => {
     expect(s.respawns).toHaveLength(0);
   });
 });
+
+describe("touch stick", () => {
+  // A row clear of the gate, so only what the test places is on the path.
+  function lane(seed = 1) {
+    const { s, rng } = playing(seed);
+    s.gate.x = 700;
+    s.gate.y = 100;
+    s.checks = [];
+    s.player.x = 100;
+    s.player.y = 400;
+    return { s, rng };
+  }
+  const right = { x: 1, y: 0 };
+  const frame = 1 / 60;
+
+  it("holds still on a centred stick and stops dead on release, with no glide", () => {
+    const { s, rng } = lane();
+    s.player.vx = 200;
+    step(s, still, frame, rng, true);
+    expect(s.player.x).toBe(100);
+    step(s, right, frame, rng, true);
+    expect(s.player.x).toBeCloseTo(100 + config.player.speed * s.scale * frame);
+    const moving = s.player.x;
+    step(s, still, frame, rng, true);
+    expect(s.player.x).toBe(moving);
+  });
+
+  it("moves at top speed at most and collects and collides along the way", () => {
+    const { s, rng } = lane();
+    s.checks = [{ x: 180, y: 400 }];
+    bugAt(s, 260, 400);
+    const top = config.player.speed * s.scale * frame;
+    for (let i = 0; i < 60; i++) {
+      const before = s.player.x;
+      step(s, right, frame, rng, true);
+      expect(s.player.x - before).toBeLessThanOrEqual(top + 1e-9);
+    }
+    expect(s.collected).toBe(1);
+    expect(s.rollbacks).toBe(config.rollbacks - 1);
+  });
+
+  it("stops in travel order when a bug opens the quiz before a check further along", () => {
+    const { s, rng } = lane();
+    s.rollbacks = 1;
+    const bug = bugAt(s, 200, 400);
+    s.checks = [{ x: 300, y: 400 }];
+    for (let i = 0; i < 120 && s.phase === "playing"; i++) step(s, right, frame, rng, true);
+    expect(s.phase).toBe("quiz");
+    expect(s.quiz?.bugId).toBe(bug.id);
+    expect(s.collected).toBe(0);
+    expect(s.checks).toHaveLength(1);
+    expect(s.player.x).toBeLessThan(bug.x);
+  });
+});

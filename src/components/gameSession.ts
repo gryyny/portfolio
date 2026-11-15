@@ -11,6 +11,7 @@ import {
   startRun,
   step,
   versionLabel,
+  type Bounds,
   type GameEvent,
   type GameState,
 } from "@/game/core";
@@ -32,6 +33,8 @@ export interface GameSession {
 
 const BEST_KEY = "gsd-best";
 const ASKED_KEY = "gsd-asked";
+// Overlays that sit over the canvas while the world moves; the arena stays clear of them.
+const OVERLAYS = ".hud, .hero, .consent, .toast, .corner, .stick";
 
 export function startGameSession(
   stage: HTMLElement,
@@ -49,9 +52,10 @@ export function startGameSession(
   let onScreen = true;
   let published = "";
   let promoTimer = 0;
+  let promoDue = false;
   let saved: { y: number; overflow: string } | null = null;
 
-  const input = createInput(canvas, {
+  const input = createInput(stage, {
     mode: () =>
       game?.phase === "playing" || game?.phase === "quiz"
         ? "move"
@@ -78,7 +82,7 @@ export function startGameSession(
     if (running()) {
       last = 0;
       raf = requestAnimationFrame(frame);
-    } else renderer.draw(game, null, 0);
+    } else renderer.draw(game, 0);
   }
 
   function frame(ts: number) {
@@ -86,9 +90,10 @@ export function startGameSession(
     if (!game) return;
     const elapsed = last ? (ts - last) / 1000 : 0;
     last = ts;
-    step(game, input.movement(), elapsed, rng);
+    const { move, direct } = input.steering();
+    step(game, move, elapsed, rng, direct);
     handle(game, drainEvents(game));
-    renderer.draw(game, input.joystick(), Math.min(elapsed, config.movementDtMax));
+    renderer.draw(game, Math.min(elapsed, config.movementDtMax));
     const quiz = game.quiz;
     if (quiz && quiz.feedback <= 0 && bar.current) {
       bar.current.style.transform = `scaleX(${Math.max(0, quiz.remaining / config.quiz.deadlineS)})`;
@@ -131,7 +136,8 @@ export function startGameSession(
         case "release":
           store.showToast(`Released ${e.version}`);
           track("level_complete", { version: e.version });
-          if (e.releases === 1) showPromo();
+          // Held until play pauses: nothing promotional covers the arena mid-run.
+          if (e.releases === 1 && !readStorage(ASKED_KEY)) promoDue = true;
           break;
         case "hit":
           store.showToast("Incident. Rolled back.");
@@ -159,6 +165,8 @@ export function startGameSession(
           track("quiz_answer", { correct: e.correct, topic: e.topic, seconds: e.seconds });
           break;
         case "gameOver":
+          // The game-over panel carries the same ask.
+          promoDue = false;
           store.setResult(saveBest(e.releases, e.version));
           track("game_over", { releases: e.releases });
           break;
@@ -168,14 +176,22 @@ export function startGameSession(
     }
   }
 
-  function showPromo() {
-    if (readStorage(ASKED_KEY)) return;
+  /** Pauses play; a held first-release card appears with the pause panel and counts as seen. */
+  function pauseGame(s: GameState) {
+    pause(s);
+    input.reset();
+    publish();
+    if (!promoDue || s.phase !== "paused") return;
+    promoDue = false;
     writeStorage(ASKED_KEY, "1");
     store.setPromo(true);
     track("ask_shown");
-    promoTimer = window.setTimeout(() => {
-      store.setPromo(false);
-    }, config.promoCardS * 1000);
+    promoTimer = window.setTimeout(hidePromo, config.promoCardS * 1000);
+  }
+
+  function hidePromo() {
+    clearTimeout(promoTimer);
+    store.setPromo(false);
   }
 
   function enterImmersive() {
@@ -193,34 +209,77 @@ export function startGameSession(
     store.setImmersive(false);
   }
 
+  /**
+   * The canvas area clear of the device safe areas (the stage's own padding) and of overlays:
+   * each one in the top half pushes the top edge down, each one in the bottom half lifts the bottom.
+   */
+  function arena(w: number, h: number): Bounds {
+    const css = getComputedStyle(stage);
+    const box = stage.getBoundingClientRect();
+    const originX = box.left + stage.clientLeft;
+    const originY = box.top + stage.clientTop;
+    const b = {
+      left: parseFloat(css.paddingLeft) || 0,
+      top: parseFloat(css.paddingTop) || 0,
+      right: w - (parseFloat(css.paddingRight) || 0),
+      bottom: h - (parseFloat(css.paddingBottom) || 0),
+    };
+    for (const el of stage.querySelectorAll(OVERLAYS)) {
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) continue;
+      const top = r.top - originY;
+      const bottom = r.bottom - originY;
+      if (r.right - originX <= b.left || r.left - originX >= b.right) continue;
+      if (top + bottom < h) b.top = Math.max(b.top, bottom);
+      else b.bottom = Math.min(b.bottom, top);
+    }
+    return b;
+  }
+
   function measure() {
     const w = stage.clientWidth;
     const h = stage.clientHeight;
     if (!w || !h) return;
+    const bounds = arena(w, h);
+    if (game) {
+      const now = game.bounds;
+      const same =
+        w === game.width &&
+        h === game.height &&
+        bounds.left === now.left &&
+        bounds.top === now.top &&
+        bounds.right === now.right &&
+        bounds.bottom === now.bottom;
+      if (same) return;
+    }
     renderer.resize(w, h);
-    if (!game) game = createGame(w, h, questions, rng);
-    else resize(game, w, h);
+    if (!game) {
+      game = createGame(w, h, questions, rng);
+      resize(game, w, h, bounds);
+    } else {
+      resize(game, w, h, bounds);
+      // A finger held across a layout change would move the player by a stale offset.
+      input.reset();
+    }
     publish();
     if (raf) return;
-    renderer.draw(game, null, 0);
+    renderer.draw(game, 0);
     kick();
   }
 
   const onVisibility = () => {
     last = 0;
-    if (document.hidden && game?.phase === "playing") {
-      pause(game);
-      input.reset();
-      publish();
-    }
+    if (document.hidden && game?.phase === "playing") pauseGame(game);
     kick();
   };
   const scheme = matchMedia("(prefers-color-scheme: dark)");
   const onScheme = () => {
     renderer.refreshPalette();
-    if (game && !raf) renderer.draw(game, null, 0);
+    if (game && !raf) renderer.draw(game, 0);
   };
   const resizeObserver = new ResizeObserver(measure);
+  // Overlays mount, unmount and change size with the phase without resizing the stage.
+  const layoutObserver = new MutationObserver(measure);
   const intersection = new IntersectionObserver(([entry]) => {
     onScreen = entry?.isIntersecting ?? true;
     kick();
@@ -230,6 +289,8 @@ export function startGameSession(
     play() {
       if (!game) return;
       enterImmersive();
+      promoDue = false;
+      hidePromo();
       startRun(game, "playing", rng);
       input.reset();
       track("game_start");
@@ -239,19 +300,23 @@ export function startGameSession(
     },
     togglePause() {
       if (!game) return;
-      if (game.phase === "playing") {
-        pause(game);
+      if (game.phase === "playing") pauseGame(game);
+      else {
+        resume(game);
+        hidePromo();
         input.reset();
-      } else resume(game);
-      publish();
+        publish();
+      }
       kick();
     },
     exit() {
       if (!game) return;
       exitImmersive();
       input.disableTilt();
+      input.reset();
       store.setTiltOn(false);
-      store.setPromo(false);
+      promoDue = false;
+      hidePromo();
       startRun(game, "attract", rng);
       publish();
       kick();
@@ -282,6 +347,7 @@ export function startGameSession(
       raf = 0;
       clearTimeout(promoTimer);
       resizeObserver.disconnect();
+      layoutObserver.disconnect();
       intersection.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
       scheme.removeEventListener("change", onScheme);
@@ -295,10 +361,19 @@ export function startGameSession(
   // Create the game now, not on the first resize callback, so a queued Play has a game to start.
   measure();
   resizeObserver.observe(stage);
+  layoutObserver.observe(stage, {
+    childList: true,
+    attributes: true,
+    attributeFilter: ["class", "data-phase"],
+  });
   intersection.observe(stage);
   document.addEventListener("visibilitychange", onVisibility);
   scheme.addEventListener("change", onScheme);
-  void document.fonts.ready.then(onScheme);
+  void document.fonts.ready.then(() => {
+    onScheme();
+    // Web fonts change the hero's height, and with it the clear area.
+    measure();
+  });
   return session;
 }
 

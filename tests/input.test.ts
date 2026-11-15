@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { config } from "@/game/config";
-import { screenTilt, tiltVector } from "@/game/input";
+import { screenTilt, stickVector, tiltVector } from "@/game/input";
 
 // Device tilted top away from the user (beta) and right side down (gamma), by different angles
 // so a swapped axis fails.
@@ -40,5 +40,23 @@ describe("tiltVector", () => {
   it("scales linearly between the dead zone and full scale", () => {
     const half = deadZoneDeg + (fullScaleDeg - deadZoneDeg) / 2;
     expect(tiltVector({ x: 5 + half, y: 30 }, neutral).x).toBeCloseTo(0.5);
+  });
+});
+
+describe("stickVector", () => {
+  const { radius, deadZone } = config.joystick;
+
+  it("is zero when a thumb rests on or near the centre, so touching never moves the player", () => {
+    expect(stickVector({ x: 0, y: 0 })).toEqual({ x: 0, y: 0 });
+    expect(stickVector({ x: radius * deadZone, y: 0 })).toEqual({ x: 0, y: 0 });
+  });
+
+  it("reaches full speed at the radius, clamps beyond it and keeps the direction", () => {
+    expect(stickVector({ x: radius, y: 0 })).toEqual({ x: 1, y: 0 });
+    const far = stickVector({ x: 0, y: -radius * 3 });
+    expect(far.x).toBeCloseTo(0);
+    expect(far.y).toBeCloseTo(-1);
+    const half = radius * deadZone + (radius - radius * deadZone) / 2;
+    expect(stickVector({ x: half, y: 0 }).x).toBeCloseTo(0.5);
   });
 });

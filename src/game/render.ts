@@ -1,6 +1,5 @@
 import { config } from "./config";
 import { shieldPosition, type GameEvent, type GameState, type Vec } from "./core";
-import type { Joystick } from "./input";
 
 type Palette = Record<
   "paper" | "muted" | "rule" | "grid" | "accent" | "ok" | "bug" | "agent",
@@ -15,7 +14,7 @@ export interface Renderer {
   resize(width: number, height: number): void;
   refreshPalette(): void;
   absorb(events: readonly GameEvent[]): void;
-  draw(s: GameState, joystick: Joystick | null, elapsed: number): void;
+  draw(s: GameState, elapsed: number): void;
 }
 
 export function createRenderer(canvas: HTMLCanvasElement, reducedMotion: boolean): Renderer {
@@ -242,26 +241,6 @@ export function createRenderer(canvas: HTMLCanvasElement, reducedMotion: boolean
     );
   }
 
-  function drawJoystick(j: Joystick) {
-    const r = config.joystick.radius;
-    ctx.strokeStyle = palette.muted;
-    ctx.lineWidth = 1.5;
-    ctx.globalAlpha = 0.6;
-    ctx.beginPath();
-    ctx.arc(j.baseX, j.baseY, r, 0, TAU);
-    ctx.stroke();
-    const dx = j.x - j.baseX;
-    const dy = j.y - j.baseY;
-    const d = Math.hypot(dx, dy);
-    const m = d > r ? r / d : 1;
-    ctx.fillStyle = palette.accent;
-    ctx.globalAlpha = 0.45;
-    ctx.beginPath();
-    ctx.arc(j.baseX + dx * m, j.baseY + dy * m, 20, 0, TAU);
-    ctx.fill();
-    ctx.globalAlpha = 1;
-  }
-
   return {
     resize(w, h) {
       width = w;
@@ -288,7 +267,7 @@ export function createRenderer(canvas: HTMLCanvasElement, reducedMotion: boolean
         else if (e.type === "quizStart") burst(e.at, palette.bug, 8);
       }
     },
-    draw(s, joystick, elapsed) {
+    draw(s, elapsed) {
       if (!width) return;
       grid ??= buildGrid();
       if (grid) ctx.drawImage(grid, 0, 0, width, height);
@@ -312,7 +291,6 @@ export function createRenderer(canvas: HTMLCanvasElement, reducedMotion: boolean
       }
       ctx.globalAlpha = 1;
       particles = particles.filter((q) => q.life > 0);
-      if (joystick) drawJoystick(joystick);
     },
   };
 }

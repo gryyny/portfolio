@@ -97,6 +97,9 @@ p {
   overflow: hidden;
   background: var(--paper);
   outline: none;
+  /* Children are absolutely positioned and ignore this; the game reads it as the safe areas. */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
 }
 
 .corner {
@@ -233,6 +236,40 @@ p {
   .hud button.coarse {
     display: inline-flex;
   }
+  .stick.coarse {
+    display: block;
+  }
+  /* The joystick owns the bottom edge during a run; toasts sit above it. */
+  .stage:not([data-phase="attract"]) .toast {
+    bottom: calc(160px + env(safe-area-inset-bottom));
+  }
+}
+
+.stick {
+  position: absolute;
+  left: 50%;
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  z-index: 2;
+  width: 124px;
+  height: 124px;
+  margin-left: -62px;
+  border-radius: 50%;
+  border: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--sheet) 70%, transparent);
+  touch-action: none;
+}
+
+.stick i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 .stage:not([data-phase="attract"]) .hero {
@@ -526,7 +563,14 @@ p {
   background: var(--ink);
   color: var(--paper);
   pointer-events: none;
+  transform: translateX(-50%);
+  /* Opacity only: the game measures this box, so it must not move while it animates. */
   animation: toast 2.4s ease forwards;
+}
+
+.toast[data-idle] {
+  visibility: hidden;
+  animation: none;
 }
 
 @keyframes pop {
@@ -550,18 +594,13 @@ p {
 }
 
 @keyframes toast {
-  0% {
+  0%,
+  100% {
     opacity: 0;
-    transform: translate(-50%, 6px);
   }
   10%,
   80% {
     opacity: 1;
-    transform: translate(-50%, 0);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, 0);
   }
 }
 

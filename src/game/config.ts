@@ -5,8 +5,10 @@ export const config = {
   scaleRange: [0.65, 1.25],
   margin: 40,
 
-  player: { radius: 11, speed: 270, response: 7, trailStep: 7, trailLength: 70 },
-  checks: { start: 3, max: 7, onField: 3, radius: 9, spawnDistance: 90 },
+  // sweepStep: the longest hop between collision tests, so a fast move cannot skip anything.
+  player: { radius: 11, speed: 270, response: 7, trailStep: 7, trailLength: 70, sweepStep: 4 },
+  // slack: extra reach for picking up a check, on top of both radii.
+  checks: { start: 3, max: 7, onField: 3, radius: 9, spawnDistance: 90, slack: 2 },
   gate: { radius: 26, spawnDistance: 200 },
   version: { start: [0, 1, 0], minorRollover: 10 },
 
@@ -56,7 +58,9 @@ export const config = {
 
   autopilot: { strength: 0.7, avoidDistance: 110, avoidWeight: 1.6 },
   tilt: { deadZoneDeg: 3, fullScaleDeg: 21 },
-  joystick: { radius: 45 },
+  // Fixed on-screen stick for touch: full speed at `radius` px from its centre; deadZone is the
+  // share of the radius that still counts as centred, so resting a thumb on it moves nothing.
+  joystick: { radius: 45, deadZone: 0.15 },
   promoCardS: 7,
   maxDpr: 2,
 } as const;

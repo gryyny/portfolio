@@ -6,6 +6,13 @@ export interface Vec {
   y: number;
 }
 export type Phase = "attract" | "playing" | "paused" | "quiz" | "over";
+/** The part of the canvas left clear of overlays and device safe areas, in canvas pixels. */
+export interface Bounds {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
 export type Version = [major: number, minor: number, patch: number];
 
 export interface Question {
@@ -54,6 +61,7 @@ export interface GameState {
   phase: Phase;
   width: number;
   height: number;
+  bounds: Bounds;
   scale: number;
   player: Vec & { vx: number; vy: number };
   trail: Vec[];
@@ -94,6 +102,7 @@ export function createGame(
     phase: "attract",
     width,
     height,
+    bounds: { left: 0, top: 0, right: width, bottom: height },
     scale: scaleFor(width, height),
     player: { x: 0, y: 0, vx: 0, vy: 0 },
     trail: [],
@@ -125,7 +134,13 @@ export function createGame(
 
 export function startRun(s: GameState, phase: "attract" | "playing", rng: Rng): void {
   s.phase = phase;
-  s.player = { x: s.width * 0.62, y: s.height * 0.6, vx: 0, vy: 0 };
+  const b = s.bounds;
+  s.player = {
+    x: b.left + (b.right - b.left) * 0.62,
+    y: b.top + (b.bottom - b.top) * 0.6,
+    vx: 0,
+    vy: 0,
+  };
   s.trail = [];
   s.checks = [];
   s.bugs = [];
@@ -147,30 +162,42 @@ export function startRun(s: GameState, phase: "attract" | "playing", rng: Rng): 
   for (let i = 0; i < config.bugs.start; i++) addBug(s, rng, 0);
 }
 
-export function resize(s: GameState, width: number, height: number): void {
-  const sx = width / s.width;
-  const sy = height / s.height;
+/** Maps everything from the old clear area onto the new one, so nothing ends up under an overlay. */
+export function resize(
+  s: GameState,
+  width: number,
+  height: number,
+  bounds: Bounds = { left: 0, top: 0, right: width, bottom: height },
+): void {
+  const from = s.bounds;
+  const sx = (bounds.right - bounds.left) / (from.right - from.left || 1);
+  const sy = (bounds.bottom - bounds.top) / (from.bottom - from.top || 1);
+  const pad = config.margin / 2;
   const fit = (p: Vec) => {
-    p.x = clamp(p.x * sx, config.margin / 2, width - config.margin / 2);
-    p.y = clamp(p.y * sy, config.margin / 2, height - config.margin / 2);
+    p.x = clamp(bounds.left + (p.x - from.left) * sx, bounds.left + pad, bounds.right - pad);
+    p.y = clamp(bounds.top + (p.y - from.top) * sy, bounds.top + pad, bounds.bottom - pad);
   };
   [s.player, s.gate, ...s.checks, ...s.bugs].forEach(fit);
   if (s.chip) fit(s.chip);
   s.trail = [];
   s.width = width;
   s.height = height;
+  s.bounds = { ...bounds };
   s.scale = scaleFor(width, height);
 }
 
 /**
  * Advances the game by `elapsed` seconds of active time. Only movement uses a bounded delta,
  * so a slow frame never moves things through each other; every timer uses the full elapsed time.
+ * `direct` steering (the touch stick) sets the velocity outright: no ramp-up and no glide, so a
+ * centred or released stick stops the player at once.
  */
-export function step(s: GameState, move: Vec, elapsed: number, rng: Rng): void {
+export function step(s: GameState, move: Vec, elapsed: number, rng: Rng, direct = false): void {
   if (s.phase === "quiz" && s.quiz) tickQuiz(s, s.quiz, elapsed);
   else if (s.phase === "attract" || s.phase === "playing") {
-    const input = s.phase === "playing" ? limit(move) : autopilot(s);
-    simulate(s, input, Math.min(elapsed, config.movementDtMax), elapsed, rng);
+    const playing = s.phase === "playing";
+    const input = playing ? cap(move, 1) : autopilot(s);
+    simulate(s, input, playing && direct, Math.min(elapsed, config.movementDtMax), elapsed, rng);
   }
 }
 
@@ -213,41 +240,34 @@ export function shieldPosition(s: GameState): Vec | null {
   };
 }
 
-function simulate(s: GameState, input: Vec, dt: number, elapsed: number, rng: Rng): void {
-  const playing = s.phase === "playing";
+function simulate(
+  s: GameState,
+  input: Vec,
+  direct: boolean,
+  dt: number,
+  elapsed: number,
+  rng: Rng,
+): void {
   const p = s.player;
   s.clock += elapsed;
 
   const top = config.player.speed * s.scale;
-  const k = Math.min(1, dt * config.player.response);
+  const k = direct ? 1 : Math.min(1, dt * config.player.response);
   p.vx += (input.x * top - p.vx) * k;
   p.vy += (input.y * top - p.vy) * k;
+  let to = { x: p.x + p.vx * dt, y: p.y + p.vy * dt };
   const edge = config.player.radius + 4;
-  p.x = clamp(p.x + p.vx * dt, edge, s.width - edge);
-  p.y = clamp(p.y + p.vy * dt, edge, s.height - edge);
-  const last = s.trail.at(-1);
-  if (!last || distance(p, last) > config.player.trailStep) {
-    s.trail.push({ x: p.x, y: p.y });
-    if (s.trail.length > config.player.trailLength) s.trail.shift();
-  }
+  const b = s.bounds;
+  to = {
+    x: clamp(to.x, b.left + edge, b.right - edge),
+    y: clamp(to.y, b.top + edge, b.bottom - edge),
+  };
 
   if (s.safety > 0) s.safety -= elapsed;
-  if (moveBugs(s, dt, elapsed, rng, playing)) return;
-
-  for (let i = s.checks.length - 1; i >= 0; i--) {
-    const c = s.checks[i];
-    if (!c || distance(c, p) >= config.player.radius + config.checks.radius + 2) continue;
-    s.checks.splice(i, 1);
-    s.collected++;
-    s.events.push({ type: "check", at: c });
-    if (s.collected >= s.required) {
-      s.gate.open = true;
-      s.events.push({ type: "gateOpen" });
-    } else fillChecks(s, rng);
-  }
-
+  moveBugs(s, dt, elapsed, rng);
   s.gate.spin += elapsed;
-  if (s.gate.open && distance(s.gate, p) < config.gate.radius + config.player.radius) ship(s, rng);
+  sweep(s, to, rng);
+  if (s.phase === "quiz" || s.phase === "over") return;
 
   updateChip(s, elapsed, rng);
   updateShield(s, elapsed);
@@ -262,10 +282,36 @@ function simulate(s: GameState, input: Vec, dt: number, elapsed: number, rng: Rn
   }
 }
 
-/** Returns true when a collision opened the quiz and the world must stop for this frame. */
-function moveBugs(s: GameState, dt: number, elapsed: number, rng: Rng, playing: boolean): boolean {
+/**
+ * Moves the player to `to` in short hops and resolves what it touches in the order it gets there.
+ * A quiz, game over or release changes the world, so the rest of the movement is dropped.
+ */
+function sweep(s: GameState, to: Vec, rng: Rng): void {
+  const p = s.player;
+  const from = { x: p.x, y: p.y };
+  const hops = Math.max(1, Math.ceil(distance(from, to) / config.player.sweepStep));
+  for (let i = 1; i <= hops; i++) {
+    p.x = from.x + ((to.x - from.x) * i) / hops;
+    p.y = from.y + ((to.y - from.y) * i) / hops;
+    const last = s.trail.at(-1);
+    if (!last || distance(p, last) > config.player.trailStep) {
+      s.trail.push({ x: p.x, y: p.y });
+      if (s.trail.length > config.player.trailLength) s.trail.shift();
+    }
+    if (s.phase === "playing" && touchBugs(s, rng)) return;
+    collectChecks(s, rng);
+    if (s.gate.open && distance(s.gate, p) < config.gate.radius + config.player.radius) {
+      ship(s, rng);
+      return;
+    }
+    pickChip(s, rng);
+  }
+}
+
+function moveBugs(s: GameState, dt: number, elapsed: number, rng: Rng): void {
   const b = config.bugs;
   const p = s.player;
+  const area = s.bounds;
   const speed = Math.min(b.baseSpeed + b.speedPerLevel * s.releases, b.maxSpeed) * s.scale;
   const k = Math.min(1, dt * b.response);
   for (const bug of s.bugs) {
@@ -274,7 +320,7 @@ function moveBugs(s: GameState, dt: number, elapsed: number, rng: Rng, playing: 
     if (bug.grace > 0) bug.grace -= elapsed;
     let dx = Math.cos(bug.heading);
     let dy = Math.sin(bug.heading);
-    if (playing) {
+    if (s.phase === "playing") {
       const d = distance(p, bug) || 1;
       dx = dx * (1 - bug.seek) + ((p.x - bug.x) / d) * bug.seek;
       dy = dy * (1 - bug.seek) + ((p.y - bug.y) / d) * bug.seek;
@@ -284,20 +330,48 @@ function moveBugs(s: GameState, dt: number, elapsed: number, rng: Rng, playing: 
     bug.x += bug.vx * dt;
     bug.y += bug.vy * dt;
     const pad = b.radius + 6;
-    if (bug.x < pad || bug.x > s.width - pad || bug.y < pad || bug.y > s.height - pad) {
-      bug.x = clamp(bug.x, pad, s.width - pad);
-      bug.y = clamp(bug.y, pad, s.height - pad);
-      bug.heading = Math.atan2(s.height / 2 - bug.y, s.width / 2 - bug.x) + (rng() - 0.5) * 1.2;
+    if (
+      bug.x < area.left + pad ||
+      bug.x > area.right - pad ||
+      bug.y < area.top + pad ||
+      bug.y > area.bottom - pad
+    ) {
+      bug.x = clamp(bug.x, area.left + pad, area.right - pad);
+      bug.y = clamp(bug.y, area.top + pad, area.bottom - pad);
+      const centre = boundsCentre(s);
+      bug.heading = Math.atan2(centre.y - bug.y, centre.x - bug.x) + (rng() - 0.5) * 1.2;
     }
+  }
+}
+
+/** Returns true when a hit opened the quiz or ended the run, so movement must stop. */
+function touchBugs(s: GameState, rng: Rng): boolean {
+  for (const bug of s.bugs) {
     const harmless = s.safety > 0 || s.shield > 0 || bug.grace > 0;
-    if (!playing || harmless || distance(p, bug) >= config.player.radius + b.radius) continue;
+    if (harmless || distance(s.player, bug) >= config.player.radius + config.bugs.radius) continue;
     if (s.rollbacks === 1) {
       startQuiz(s, bug, rng);
       return true;
     }
     damage(s);
+    if (s.phase === "over") return true;
   }
   return false;
+}
+
+function collectChecks(s: GameState, rng: Rng): void {
+  const reach = config.player.radius + config.checks.radius + config.checks.slack;
+  for (let i = s.checks.length - 1; i >= 0; i--) {
+    const c = s.checks[i];
+    if (!c || distance(c, s.player) >= reach) continue;
+    s.checks.splice(i, 1);
+    s.collected++;
+    s.events.push({ type: "check", at: c });
+    if (s.collected >= s.required) {
+      s.gate.open = true;
+      s.events.push({ type: "gateOpen" });
+    } else fillChecks(s, rng);
+  }
 }
 
 function damage(s: GameState): void {
@@ -342,12 +416,15 @@ function updateChip(s: GameState, dt: number, rng: Rng): void {
   const chip = s.chip;
   if (!chip) return;
   chip.life -= dt;
-  if (chip.life <= 0) {
-    s.chip = null;
-    s.chipTimer = between(rng, perk.afterExpiryS);
-    return;
-  }
-  if (distance(chip, s.player) >= config.player.radius + perk.radius) return;
+  if (chip.life > 0) return;
+  s.chip = null;
+  s.chipTimer = between(rng, perk.afterExpiryS);
+}
+
+function pickChip(s: GameState, rng: Rng): void {
+  const perk = config.perk;
+  const chip = s.chip;
+  if (!chip || distance(chip, s.player) >= config.player.radius + perk.radius) return;
   s.chip = null;
   s.chipTimer = between(rng, perk.afterPickupS);
   const at = { x: chip.x, y: chip.y };
@@ -436,7 +513,7 @@ function finishQuiz(s: GameState, q: Quiz): void {
 function autopilot(s: GameState): Vec {
   const a = config.autopilot;
   const p = s.player;
-  let target: Vec = s.gate.open ? s.gate : { x: s.width / 2, y: s.height / 2 };
+  let target: Vec = s.gate.open ? s.gate : boundsCentre(s);
   if (!s.gate.open) {
     let best = Infinity;
     for (const c of s.checks) {
@@ -481,10 +558,14 @@ function addBug(s: GameState, rng: Rng, grace: number): void {
   });
 }
 
-/** A random point inside the margins, preferably at least `away` from the player. */
+/** A random point inside the clear area's margins, preferably at least `away` from the player. */
 function spot(s: GameState, away: number, rng: Rng): Vec {
   const m = config.margin;
-  const pick = () => ({ x: m + rng() * (s.width - 2 * m), y: m + rng() * (s.height - 2 * m) });
+  const { left, top, right, bottom } = s.bounds;
+  const pick = () => ({
+    x: left + m + rng() * Math.max(0, right - left - 2 * m),
+    y: top + m + rng() * Math.max(0, bottom - top - 2 * m),
+  });
   for (let i = 0; i < 40; i++) {
     const v = pick();
     if (distance(v, s.player) > away) return v;
@@ -492,14 +573,19 @@ function spot(s: GameState, away: number, rng: Rng): Vec {
   return pick();
 }
 
+function boundsCentre(s: GameState): Vec {
+  const b = s.bounds;
+  return { x: (b.left + b.right) / 2, y: (b.top + b.bottom) / 2 };
+}
+
 function scaleFor(width: number, height: number): number {
   const [lo, hi] = config.scaleRange;
   return clamp(Math.min(width, height) / config.scaleReference, lo, hi);
 }
 
-function limit(v: Vec): Vec {
+function cap(v: Vec, length: number): Vec {
   const m = Math.hypot(v.x, v.y);
-  return m > 1 ? { x: v.x / m, y: v.y / m } : v;
+  return m > length ? { x: (v.x / m) * length, y: (v.y / m) * length } : v;
 }
 
 function shuffle<T>(items: T[], rng: Rng): T[] {

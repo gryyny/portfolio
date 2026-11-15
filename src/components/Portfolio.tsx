@@ -100,7 +100,7 @@ export function Portfolio({ hero, links }: { hero: ReactNode; links: ReactNode }
         </button>
         <p className="hint full" hidden={!ready}>
           <span className="fine">Arrows or WASD to steer</span>
-          <span className="coarse">Drag anywhere to steer. Tilt is optional.</span>
+          <span className="coarse">Steer with the joystick at the bottom. Tilt is optional.</span>
         </p>
       </div>
 
@@ -135,6 +135,13 @@ export function Portfolio({ hero, links }: { hero: ReactNode; links: ReactNode }
           <button type="button" onClick={() => controls.current?.exit()}>
             Exit
           </button>
+        </div>
+      )}
+
+      {(phase === "playing" || phase === "paused" || phase === "quiz") && (
+        // Mounted through pause and quiz so the arena keeps its size; only touch screens show it.
+        <div className="stick coarse" aria-hidden="true">
+          <i />
         </div>
       )}
 
@@ -194,7 +201,7 @@ export function Portfolio({ hero, links }: { hero: ReactNode; links: ReactNode }
 
       {phase === "over" && result && <GameOver result={result} controls={controls} />}
 
-      {promo && phase === "playing" && (
+      {promo && phase === "paused" && (
         <div className="nudge" role="status">
           <span>First release shipped. Enjoying it?</span>
           <a
@@ -260,11 +267,16 @@ export function Portfolio({ hero, links }: { hero: ReactNode; links: ReactNode }
         </a>
       )}
 
-      {toast && (
-        <div key={toast.id} className="toast" role="status" aria-live="polite">
-          {toast.text}
-        </div>
-      )}
+      {/* Mounted while idle too, so the game can keep the arena clear of the toast's slot. */}
+      <div
+        key={toast?.id ?? 0}
+        className="toast"
+        role="status"
+        aria-live="polite"
+        data-idle={toast ? undefined : ""}
+      >
+        {toast?.text ?? "\u00a0"}
+      </div>
     </div>
   );
 }

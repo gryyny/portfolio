@@ -1,14 +1,16 @@
-# Site blocks for gryyny.si, added to the food diary's Caddyfile on the same VPS.
+# Site blocks for gryyny.si, served by the food diary's Caddy on the same VPS.
+# Installed as /srv/portfolio-config/portfolio.caddy (root-owned; the deploy key cannot change it).
 #
-# One-time change in the diary's compose.yaml (caddy service only):
-#   volumes:
-#     - /srv/portfolio:/srv/portfolio:ro
-# Mount the parent directory, not `current`, so later symlink swaps are visible inside the container.
-# A new mount needs the Caddy container recreated (a reload cannot add it), which can drop proxied
-# requests for a moment. Validate first, then recreate only Caddy, keeping its data/config volumes:
-#   docker compose run --rm --no-deps caddy caddy validate --config /etc/caddy/Caddyfile
+# The diary's own Caddyfile stays untouched. compose.override.yaml (next to the diary's
+# compose.yaml) mounts this file, Caddyfile.all and /srv/portfolio read-only, and starts Caddy
+# with Caddyfile.all, which imports both site files. The parent /srv/portfolio is mounted, not
+# `current`, so later symlink swaps are visible inside the container.
+#
+# Applying it recreates the Caddy container (a reload cannot add mounts), which can drop
+# proxied diary requests for a moment. The app and database are not restarted:
+#   docker compose run --rm --no-deps caddy caddy validate --config /etc/caddy/Caddyfile.all --adapter caddyfile
 #   docker compose up -d --no-deps caddy
-# Then check the diary page, its API health and its auth proxy. Later portfolio releases need no reload.
+# Then check the diary page, its API health and its auth proxy. Later releases need no reload.
 
 gryyny.si {
 	encode zstd gzip

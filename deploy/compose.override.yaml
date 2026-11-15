@@ -1,0 +1,9 @@
+# Placed next to the food diary's compose.yaml on the VPS; Compose merges it automatically.
+# It only adds the portfolio's read-only mounts and the combined entry config to Caddy.
+services:
+  caddy:
+    command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile.all", "--adapter", "caddyfile"]
+    volumes:
+      - /srv/portfolio-config/Caddyfile.all:/etc/caddy/Caddyfile.all:ro
+      - /srv/portfolio-config/portfolio.caddy:/etc/caddy/portfolio.caddy:ro
+      - /srv/portfolio:/srv/portfolio:ro

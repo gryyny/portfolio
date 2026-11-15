@@ -1,0 +1,3 @@
+# Entry config for the shared Caddy: the diary's site, then the portfolio's.
+import /etc/caddy/Caddyfile
+import /etc/caddy/portfolio.caddy

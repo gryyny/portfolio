@@ -83,10 +83,9 @@ test("serves the CV download as a PDF", async ({ request }) => {
 test.describe("without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
-  test("shows identity, facts and four working links", async ({ page }) => {
+  test("shows identity and four working links", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1, name: "Andrii Hrynchuk" })).toBeVisible();
-    await expect(page.locator(".facts dt")).toHaveCount(3);
     const links = page.locator(".hero .links a");
     await expect(links).toHaveCount(4);
     await expect(links.nth(3)).toHaveAttribute("href", "mailto:gryyny@gmail.com");

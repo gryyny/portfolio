@@ -252,6 +252,11 @@ export function Portfolio({ hero, links }: { hero: ReactNode; links: ReactNode }
       )}
 
       {phase === "attract" && <ConsentBar />}
+      {phase === "attract" && (
+        <a className="corner" href="/privacy">
+          Privacy
+        </a>
+      )}
 
       {toast && (
         <div key={toast.id} className="toast" role="status" aria-live="polite">

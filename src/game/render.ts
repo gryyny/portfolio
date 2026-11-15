@@ -74,8 +74,6 @@ export function createRenderer(canvas: HTMLCanvasElement, reducedMotion: boolean
     gc.fillStyle = palette.muted;
     gc.font = `10px ${mono}`;
     gc.fillText("main", 8, height - 10);
-    gc.textAlign = "right";
-    gc.fillText("SHEET 1/1 · gryyny.si", width - 8, height - 10);
     return g;
   }
 

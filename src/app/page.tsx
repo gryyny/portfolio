@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Portfolio } from "@/components/Portfolio";
 import { profile, siteUrl } from "@/content/profile";
 
@@ -13,7 +12,8 @@ const jsonLd = {
     givenName: profile.givenName,
     familyName: profile.familyName,
     jobTitle: profile.jobTitle,
-    description: profile.description,
+    // The full facts live here and in /llms.txt; the page itself shows only what people need.
+    description: `${profile.description} ${profile.summary} ${profile.experience}`,
     url: siteUrl,
     email: `mailto:${profile.email}`,
     address: {
@@ -48,7 +48,7 @@ function ProfileLinks() {
 
 export default function Home() {
   return (
-    <main className="page">
+    <main className="home">
       <script
         type="application/ld+json"
         // JSON-LD must be raw JSON; "<" is escaped so the content cannot close the tag.
@@ -61,28 +61,9 @@ export default function Home() {
             <p className="eyebrow full">gryyny.si</p>
             <h1 className="name">{profile.name}</h1>
             <p className="role full">{profile.headline}</p>
-            <p className="line full">{profile.summary}</p>
           </>
         }
       />
-      <section className="facts" aria-label="Highlights">
-        <dl>
-          {profile.facts.map((fact) => (
-            <div key={fact.value}>
-              <dt>{fact.value}</dt>
-              <dd>{fact.label}</dd>
-            </div>
-          ))}
-        </dl>
-        <p className="exp">{profile.experience}</p>
-      </section>
-      <footer className="foot">
-        <span>© {profile.name}</span>
-        <Link href="/privacy">Privacy</Link>
-        <a href={profile.links.repo} target="_blank" rel="noopener">
-          Source
-        </a>
-      </footer>
     </main>
   );
 }

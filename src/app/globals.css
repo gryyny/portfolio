@@ -86,15 +86,25 @@ p {
 
 /* ---------- Stage ---------- */
 
+/* The game field is the whole first screen; the hero card and links sit on top of it. */
+.home {
+  height: 100svh;
+}
+
 .stage {
   position: relative;
-  height: min(78svh, 680px);
-  min-height: 520px;
-  border: 1px solid var(--rule);
-  border-radius: 14px;
+  height: 100%;
   overflow: hidden;
   background: var(--paper);
   outline: none;
+}
+
+.corner {
+  position: absolute;
+  right: calc(12px + env(safe-area-inset-right));
+  bottom: calc(10px + env(safe-area-inset-bottom));
+  font: 11px var(--mono);
+  color: var(--muted);
 }
 
 .stage canvas {
@@ -144,11 +154,6 @@ p {
 
 .role {
   font-weight: 600;
-}
-
-.line {
-  color: var(--muted);
-  font-size: 14px;
 }
 
 .links {
@@ -456,7 +461,8 @@ p {
 .consent {
   position: absolute;
   left: 50%;
-  bottom: calc(12px + env(safe-area-inset-bottom));
+  /* Leaves room for the Privacy link in the corner below it. */
+  bottom: calc(34px + env(safe-area-inset-bottom));
   transform: translateX(-50%);
   z-index: 2;
   width: max-content;
@@ -581,50 +587,6 @@ p {
   .nudge {
     animation: none;
   }
-}
-
-/* ---------- Below the arena ---------- */
-
-.facts {
-  display: grid;
-  gap: 14px;
-  border: 1px solid var(--rule);
-  background: var(--sheet);
-  border-radius: 12px;
-  padding: 18px 20px;
-}
-
-.facts dl {
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 14px 24px;
-}
-
-.facts dl > div {
-  display: grid;
-  gap: 2px;
-  min-width: 0;
-}
-
-.facts dt {
-  font: 800 26px/1.1 var(--display);
-  color: var(--accent);
-  font-variant-numeric: tabular-nums;
-}
-
-.facts dd {
-  margin: 0;
-  font-size: 14px;
-  color: var(--muted);
-}
-
-.foot {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  font: 12px var(--mono);
-  color: var(--muted);
 }
 
 /* ---------- Privacy ---------- */

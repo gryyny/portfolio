@@ -18,7 +18,7 @@ export default function Privacy() {
           <Link href="/">← gryyny.si</Link>
         </p>
         <h1>Privacy</h1>
-        <p>Last updated: 15 November 2026.</p>
+        <p>Last updated: 16 November 2026.</p>
         <p>
           This site has no accounts and no forms. It keeps a few values in your browser
           {analyticsConfigured
@@ -56,6 +56,11 @@ export default function Privacy() {
               <li>
                 Game events: game start, level complete, AI perk outcome, quiz answer, game over,
                 clicks on the CV, Email, LinkedIn and GitHub links.
+              </li>
+              <li>
+                Retention: event data is kept for 2 months. User-level data linked to the
+                pseudonymous identifier is kept for up to 14 months, and that period restarts each
+                time you return.
               </li>
             </ul>
             <ConsentSettings />

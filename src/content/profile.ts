@@ -9,8 +9,7 @@ export const profile = {
   familyName: "Hrynchuk",
   jobTitle: "Tech Lead",
   headline: "Tech Lead · Full-stack product, Web3 and DeFi, AI agent workflows",
-  summary:
-    "15+ years in software. I led a security product from idea to first enterprise sales in 10 months.",
+  summary: "I led a security product from idea to first enterprise sales in 10 months.",
   description:
     "Andrii Hrynchuk is a Tech Lead in Lisbon: full-stack product, Web3 and DeFi, and AI agent workflows. 15+ years in software.",
   // Link previews say what the page is; career facts stay in the CV, JSON-LD and /llms.txt.

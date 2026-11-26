@@ -21,7 +21,6 @@ export const profile = {
       value: "10 months",
       label: "from idea to first enterprise sales of a security product I led at Hacken",
     },
-    { value: "20+", label: "engineers mentored while leading teams since 2017" },
     { value: "20", label: "people ship with the AI agent workflow I built at Limitless Labs" },
   ],
   experience: "Now Tech Lead at Limitless Labs. Before: Tacans Labs, Hacken, Tabia and Brights.",
